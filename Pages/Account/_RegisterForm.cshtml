@@ -1,0 +1,108 @@
+@page
+@model HomeownersMS.Models.UserRegistrationModel
+@{
+    ViewData["Title"] = "Admin Registration - Page 1";
+    Layout = null;  // Remove layout for a standalone page
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .registration-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-container">
+            <h2 class="text-center">Registration</h2>
+            <p class="text-center">Please provide your details to complete your registration</p>
+
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label asp-for="Username" class="control-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label for="Password" class="control-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label for="ConfirmPassword" class="control-label">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="userType">Select User Type</label>
+                    <select class="form-control" id="userType" name="userType" required>
+                        <option value="">Choose a Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Editor">Editor</option>
+                        <option value="Viewer">Viewer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="firstname">Enter firstname</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="middlename">Enter middlename</label>
+                    <input type="text" class="form-control" id="middlename" name="middlename">
+                </div>
+
+                <div class="form-group">
+                    <label for="lastname">Enter lastname</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Enter email address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Enter phone number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+
+                <p>Go back to <a asp-page="/Account/Login">Login</a> page.</p>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</body>
+</html>

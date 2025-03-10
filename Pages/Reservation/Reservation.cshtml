@@ -1,0 +1,200 @@
+@page
+@using System.Security.Claims
+@model HomeownersMS.Pages.Reservation.ReservationModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Reservation";
+
+    var username = HttpContext?.User?.Identity?.Name ?? "Guest";
+    var privilege = HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "Guest";
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/Globalstyle.css">
+    <title>Reservation</title>
+</head>
+<body class="dashboard">
+    <!-- Header -->
+    <div class="headerPage">
+        <button id="sideNav_toggleBtn">
+            <i class="bi bi-list fs-4 p-2"></i>
+        </button>
+        <h3 class="m-0">Reservation</h3>
+        <i class="bi bi-bell fs-4 p-2"></i>
+    </div>
+
+    <!-- Side Navigation -->
+    <div class="sideNavBar" id="sidenavBar">
+        <!-- User Profile Section -->
+        <div class="userProfile">
+            <i class="profileImage bi bi-person-circle"></i>
+            <div class="userInfo">
+                <p class="userName">@username</p>
+                <p class="userType">Resident</p>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="mainfunc_navLinks">
+            <a asp-page="/Dashboard/Index" class="navItem @(currentPage == "/Dashboard/Index" ? "active" : "")">
+                <i class="bi bi-house-door-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a asp-page="/Reservation/Reservation" class="navItem @(currentPage == "/Reservation/Reservation" ? "active" : "")">
+                <i class="bi bi-calendar-fill"></i>
+                <span>Reservation</span>
+            </a>
+            <a asp-page="/Billing" class="navItem @(currentPage?.StartsWith("/Billing")==true ? "active" : "")">
+                <i class="bi bi-credit-card-fill"></i>
+                <span>Billing</span>
+            </a>
+            <a asp-page="/Service" class="navItem @(currentPage?.StartsWith("/Service")==true ? "active" : "")">
+                <i class="bi bi-tools"></i>
+                <span>Service</span>
+            </a>
+            <a asp-page="/Community" class="navItem @(currentPage?.StartsWith("/Community")==true ? "active" : "")">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Community</span>
+            </a>
+            <a asp-page="/Resources" class="navItem @(currentPage?.StartsWith("/Resources")==true ? "active" : "")">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Resources</span>
+            </a>
+            <a asp-page="/Security" class="navItem @(currentPage?.StartsWith("/Security")==true ? "active" : "")">
+                <i class="bi bi-shield-shaded"></i>
+                <span>Security</span>
+            </a>
+        </div>
+
+        <div class="genfunc_navLinks">
+            <a asp-page="/Settings" class="navItem @(currentPage?.StartsWith("/Settings")==true ? "active" : "")">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a asp-page="/Login" class="navItem @(currentPage?.StartsWith("/Login")==true ? "active" : "")">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid mainSection">
+        <div class="row">
+            <!-- Reservation Content -->
+            <div class="col-12">
+                <h1>Reservation</h1>
+                <div class="facilities">
+                    <h2>Facilities</h2>
+                    <div class="container">
+                        <div class="row g-3"> <!-- Row with spacing -->
+                            <div class="col-lg-12"> <!-- 1 column on large screens, 2 columns on medium/small screens -->
+                                <a asp-page="/Reservation/FunctionalHall" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up @(currentPage == "/Reservation/FunctionalHall" ? "active" : "")">
+                                    <img src="/images/FunctionHall.png" class="img-fluid facility-img me-3" alt="Function Hall">
+                                    <div>
+                                        <strong>Function Hall</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up">
+                                    <img src="/images/SwimmingPool.png" class="img-fluid facility-img me-3" alt="Swimming Pool">
+                                    <div>
+                                        <strong>Swimming Pool</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up">
+                                    <img src="/images/BasketballCourt.png" class="img-fluid facility-img me-3" alt="Basketball Court">
+                                    <div>
+                                        <strong>Basketball Court</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up">
+                                    <img src="/images/Chapel.png" class="img-fluid facility-img me-3" alt="Chapel">
+                                    <div>
+                                        <strong>Chapel</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-history mt-5">
+                    <h2>Reservation History</h2>
+                    <div class="table-responsive"> <!-- Makes table scrollable on small screens -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Facility</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Function Hall
+                                        <br>
+                                        <small class="text-muted">ID/34251</small>
+                                    </td>
+                                    <td>Feb. 15, 2025</td>
+                                    <td>10:30 AM - 7:30 PM</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Party Room
+                                        <br>
+                                        <small class="text-muted">ID/34251</small>
+                                    </td>
+                                    <td>Feb. 13, 2025</td>
+                                    <td>10:30 AM - 7:30 PM</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Function Hall
+                                        <br>
+                                        <small class="text-muted">ID/34251</small>
+                                    </td>
+                                    <td>Feb. 3, 2025</td>
+                                    <td>10:30 AM - 7:30 PM</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Function Hall
+                                        <br>
+                                        <small class="text-muted">ID/34251</small>
+                                    </td>
+                                    <td>Jan. 15, 2025</td>
+                                    <td>10:30 AM - 7:30 PM</td>
+                                    <td><span class="badge bg-danger">Canceled</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="#" class="btn btn-primary">View All</a>
+                </div>
+
+        </div>
+    </div>
+
+    <script src="~/js/SideNavjs.js"></script>
+</body>
+</html>

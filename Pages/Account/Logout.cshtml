@@ -1,0 +1,11 @@
+@page
+@model HomeownersMS.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<form method="post" asp-page="/Account/Logout" id="logoutForm"></form>
+<script>
+    document.getElementById('logoutForm').submit();
+</script>
+<p>Logging out...</p>

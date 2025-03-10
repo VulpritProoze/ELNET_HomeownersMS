@@ -1,0 +1,227 @@
+﻿@page
+@using System.Security.Claims
+@model HomeownersMS.Pages.Dashboard.IndexModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Dashboard";
+
+    var username = HttpContext?.User?.Identity?.Name ?? "Guest";
+    var privilege = HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "Guest";
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/Globalstyle.css">
+    <title>Dashboard</title>
+</head>
+<body class="dashboard">
+    <!-- Header -->
+    <div class="headerPage">
+        <button id="sideNav_toggleBtn">
+            <i class="bi bi-list fs-4 p-2"></i>
+        </button>
+        <h3 class="m-0">Dashboard</h3>
+        <i class="bi bi-bell fs-4 p-2"></i>
+    </div>
+
+    <!-- Side Navigation -->
+    <div class="sideNavBar" id="sidenavBar">
+        <!-- User Profile Section -->
+        <div class="userProfile">
+            <i class="profileImage bi bi-person-circle"></i>
+            <div class="userInfo">
+                <p class="userName">@username</p>
+                <p class="userType">Resident</p>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="mainfunc_navLinks">
+            <a asp-page="/Dashboard/Index" class="navItem @(currentPage == "/Dashboard/Index" ? "active" : "")">
+                <i class="bi bi-house-door-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a asp-page="/Reservation/Reservation" class="navItem @(currentPage == "/Reservation/Reservation" ? "active" : "")">                <i class="bi bi-calendar-fill"></i>
+                <span>Reservation</span>
+            </a>
+            <a asp-page="/Billing" class="navItem @(currentPage?.StartsWith("/Billing")==true ? "active" : "")">
+                <i class="bi bi-credit-card-fill"></i>
+                <span>Billing</span>
+            </a>
+            <a asp-page="/Service" class="navItem @(currentPage?.StartsWith("/Service")==true ? "active" : "")">
+                <i class="bi bi-tools"></i>
+                <span>Service</span>
+            </a>
+            <a asp-page="/Community" class="navItem @(currentPage?.StartsWith("/Community")==true ? "active" : "")">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Community</span>
+            </a>
+            <a asp-page="/Resources" class="navItem @(currentPage?.StartsWith("/Resources")==true ? "active" : "")">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Resources</span>
+            </a>
+            <a asp-page="/Security" class="navItem @(currentPage?.StartsWith("/Security")==true ? "active" : "")">
+                <i class="bi bi-shield-shaded"></i>
+                <span>Security</span>
+            </a>
+        </div>
+
+        <div class="genfunc_navLinks">
+            <a asp-page="/Settings" class="navItem @(currentPage?.StartsWith("/Settings")==true ? "active" : "")">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a asp-page="/Login" class="navItem @(currentPage?.StartsWith("/Login")==true ? "active" : "")">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid mainSection">
+        <div class="row">
+            <!-- Announcement Section -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div id="announcementSection">
+                    <div class="Title-ViewAll">
+                        <p class="fs-4 m-0">Announcement</p>
+                        <a asp-page="/Announcements" class="text-primary">View All</a>
+                    </div>
+                    <div id="announcementCards" class="row">
+                        <div class="ann-Card clean-up">
+                            <div class="header">
+                                <i class="bi bi-trash-fill icon" style="background-color: #28a745;"></i>
+                                <span>Clean-Up Drive</span>
+                            </div>
+                            <div class="content">
+                                <p><strong>Feb 18 at 9 AM - 2 PM</strong></p>
+                                <p><strong>Blocks 1-6</strong></p>
+                                <p>HOA Office - <a href="tel:0321234567">(032) 123-4567</a></p>
+                                <p>Scheduled power maintenance. Change devices in advance.</p>
+                            </div>
+                        </div>
+                        <div class="ann-Card power-outage">
+                            <div class="header">
+                                <i class="bi bi-lightning-fill icon" style="background-color: #dc3545;"></i>
+                                <span>Power Interruption</span>
+                            </div>
+                            <div class="content">
+                                <p><strong>Feb 18 at 9 AM - 2 PM</strong></p>
+                                <p><strong>Blocks 1-6</strong></p>
+                                <p>HOA Office - <a href="tel:0321234567">(032) 123-4567</a></p>
+                                <p>Scheduled power maintenance. Change devices in advance.</p>
+                            </div>
+                        </div>
+
+                        <div class="ann-Card clean-up">
+                            <div class="header">
+                                <i class="bi bi-trash-fill icon" style="background-color: #28a745;"></i>
+                                <span>Clean-Up Drive</span>
+                            </div>
+                            <div class="content">
+                                <p><strong>Feb 18 at 9 AM - 2 PM</strong></p>
+                                <p><strong>Blocks 1-6</strong></p>
+                                <p>HOA Office - <a href="tel:0321234567">(032) 123-4567</a></p>
+                                <p>Scheduled power maintenance. Change devices in advance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Summaries -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div id="tableSummaries">
+                    <div id="upcomingbillsSummary" class="mb-4">
+                        <p class="fs-5 fw-bold m-0">Billing Summary</p>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="dueNames">Monthly HOA</td>
+                                    <td class="dueDates">Feb. 15, 2025</td>
+                                    <td class="duePrices">₱ 250.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="dueNames">Monthly HOA</td>
+                                    <td class="dueDates">Feb. 15, 2025</td>
+                                    <td class="duePrices">₱ 250.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="dueNames">Monthly HOA</td>
+                                    <td class="dueDates">Feb. 15, 2025</td>
+                                    <td class="duePrices">₱ 250.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a asp-page="/Billing" class="viewall_Btn btn btn-primary">View All</a>
+                    </div>
+                    <div id="securityLogs">
+                        <p class="fs-5 fw-bold m-0">Security Logs</p>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="secDates">Feb. 15, 2025
+                                        <p class="secTimes">10:30 - 7:30 PM</p>
+                                    </td>
+                                    <td class="secAbout">Visitor Entry</td>
+                                    <td class="secTags">Approved</td>
+                                </tr>
+                                <tr>
+                                    <td class="secDates">Feb. 15, 2025
+                                        <p class="secTimes">10:30 - 7:30 PM</p>
+                                    </td>
+                                    <td class="secAbout">Visitor Entry</td>
+                                    <td class="secTags">Approved</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a asp-page="/Security" class="viewall_Btn btn btn-primary">View All</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Section -->
+            <div class="col-12 col-lg-4">
+                <div id="eventsSection">
+                    <div id="calendarSection" class="mb-4">
+                        <p class="fs-5 fw-bold m-0">Event Calendar</p>
+                        <div id="calendar"></div>
+                    </div>
+                    <div id="timelineSection">
+                        <p class="fs-5 fw-bold m-0">Upcoming Events</p>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <span class="timeline-date">Feb 15, 2025</span>
+                                <p class="timeline-event">HOA Monthly Meeting at 10:00 AM</p>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="timeline-date">Feb 20, 2025</span>
+                                <p class="timeline-event">Community Clean-Up Drive</p>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="timeline-date">Feb 25, 2025</span>
+                                <p class="timeline-event">Security Drill</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/SideNavjs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="js/Calendar.js"></script>
+</body>
+</html>

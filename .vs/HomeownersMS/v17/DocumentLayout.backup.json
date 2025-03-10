@@ -1,0 +1,516 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\dashboard\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\dashboard\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\admin\\users\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\admin\\users\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\accessdenied.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\accessdenied.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\logout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\logout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\models\\resident.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:models\\resident.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\data\\homeownerscontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:data\\homeownerscontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/HomeownersContext_e71be176_bc2e_4bde_b917_685163f5749a/True/SqlTable/dbo.Resident.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/HomeownersContext_e71be176_bc2e_4bde_b917_685163f5749a/True/SqlTable/dbo.User.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|d:\\user folder\\magus files\\rra personal folder\\helloworld\\c#\\homeownersms\\models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F66762E0-26C0-42AA-8034-E316D30A05D9}|HomeownersMS.csproj|solutionrelative:models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Index.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Index.cshtml.cs",
+              "RelativeToolTip": "Pages\\Index.cshtml.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAYwBMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T13:16:47.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Account\\Login.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Login.cshtml",
+              "RelativeToolTip": "Pages\\Account\\Login.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABsAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-11T12:04:50.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Pages\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-10T05:19:50.138Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Index.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Index.cshtml",
+              "RelativeToolTip": "Pages\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-11T11:21:15.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Account\\Register.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Register.cshtml",
+              "RelativeToolTip": "Pages\\Account\\Register.cshtml",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAAC8AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-11T11:25:30.331Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Dashboard\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Dashboard\\Index.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Dashboard\\Index.cshtml.cs",
+              "RelativeToolTip": "Pages\\Dashboard\\Index.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T12:56:17.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Edit.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Edit.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Edit.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Edit.cshtml.cs",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Edit.cshtml.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwCAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:13:31.366Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Edit.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Edit.cshtml",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Edit.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-10T06:13:31.034Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Index.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Index.cshtml",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-10T06:13:33.038Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Create.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Create.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Create.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Create.cshtml.cs",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Create.cshtml.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:13:30.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Details.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Details.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Details.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Details.cshtml.cs",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Details.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:13:32.075Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Details.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Details.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Details.cshtml",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Details.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-10T06:13:31.739Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Delete.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Delete.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Delete.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Delete.cshtml.cs",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Delete.cshtml.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:13:32.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Delete.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Delete.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Delete.cshtml",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Delete.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-10T06:13:32.408Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Create.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Admin\\Users\\Create.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Admin\\Users\\Create.cshtml",
+              "RelativeToolTip": "Pages\\Admin\\Users\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-10T06:13:29.32Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Dashboard\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Dashboard\\Index.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Dashboard\\Index.cshtml",
+              "RelativeToolTip": "Pages\\Dashboard\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-11T12:48:32.93Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Login.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Login.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Account\\Login.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Login.cshtml.cs",
+              "RelativeToolTip": "Pages\\Account\\Login.cshtml.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAEcAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T12:04:50.592Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAAB0AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:13:28.492Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AccessDenied.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\AccessDenied.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Account\\AccessDenied.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\AccessDenied.cshtml.cs",
+              "RelativeToolTip": "Pages\\Account\\AccessDenied.cshtml.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T12:32:10.048Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AccessDenied.cshtml",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\AccessDenied.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Account\\AccessDenied.cshtml",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\AccessDenied.cshtml",
+              "RelativeToolTip": "Pages\\Account\\AccessDenied.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-11T12:30:07.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Logout.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Logout.cs",
+              "RelativeDocumentMoniker": "Pages\\Account\\Logout.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Logout.cs",
+              "RelativeToolTip": "Pages\\Account\\Logout.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T12:25:52.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Register.cshtml.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Account\\Register.cshtml.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeToolTip": "Pages\\Account\\Register.cshtml.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAswDcAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T11:25:30.763Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Resident.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\Resident.cs",
+              "RelativeDocumentMoniker": "Models\\Resident.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\Resident.cs",
+              "RelativeToolTip": "Models\\Resident.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T05:42:12.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "HomeownersContext.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Data\\HomeownersContext.cs",
+              "RelativeDocumentMoniker": "Data\\HomeownersContext.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Data\\HomeownersContext.cs",
+              "RelativeToolTip": "Data\\HomeownersContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:13:27.326Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "DbInitializer.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Data\\DbInitializer.cs",
+              "RelativeDocumentMoniker": "Data\\DbInitializer.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Data\\DbInitializer.cs",
+              "RelativeToolTip": "Data\\DbInitializer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T06:33:24.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAcwDUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T05:22:00.141Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "dbo.User.sql",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/HomeownersContext_e71be176_bc2e_4bde_b917_685163f5749a/True/SqlTable/dbo.User.sql",
+              "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/HomeownersContext_e71be176_bc2e_4bde_b917_685163f5749a/True/SqlTable/dbo.User.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-02-10T06:50:51.618Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "dbo.Resident.sql",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/HomeownersContext_e71be176_bc2e_4bde_b917_685163f5749a/True/SqlTable/dbo.Resident.sql",
+              "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/HomeownersContext_e71be176_bc2e_4bde_b917_685163f5749a/True/SqlTable/dbo.Resident.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-02-10T06:51:02.251Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\Staff.cs",
+              "RelativeDocumentMoniker": "Models\\Staff.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\Staff.cs",
+              "RelativeToolTip": "Models\\Staff.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T05:50:19.476Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Admin.cs",
+              "DocumentMoniker": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\Admin.cs",
+              "RelativeDocumentMoniker": "Models\\Admin.cs",
+              "ToolTip": "D:\\User Folder\\Magus Files\\RRA Personal Folder\\HelloWorld\\C#\\HomeownersMS\\Models\\Admin.cs",
+              "RelativeToolTip": "Models\\Admin.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAiwBsAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T05:54:00.943Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

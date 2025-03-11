@@ -1,8 +1,82 @@
 @page
 @model HomeownersMS.Pages.Account.RegisterAdminModel
 @{
+    Layout = "_AdminLayout"; // Use the Admin layout
     ViewData["Title"] = "Register Admin";
+    ViewData["HeaderTitle"] = "Register Admin";
 }
-<h1>Register Admin</h1>
-<hr />
-<partial name="_RegisterForm" model="Model.UserInput" />
+
+<div class="container mt-4">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="row g-3">
+                        <!-- Username -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.Username" class="form-label">Username</label>
+                            <input asp-for="UserInput.Username" class="form-control" />
+                            <span asp-validation-for="UserInput.Username" class="text-danger"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.Email" class="form-label">Email</label>
+                            <input asp-for="UserInput.Email" type="email" class="form-control" />
+                            <span asp-validation-for="UserInput.Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.Password" class="form-label">Password</label>
+                            <input asp-for="UserInput.Password" type="password" class="form-control" />
+                            <span asp-validation-for="UserInput.Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.ConfirmPassword" class="form-label">Confirm Password</label>
+                            <input asp-for="UserInput.ConfirmPassword" type="password" class="form-control" />
+                            <span asp-validation-for="UserInput.ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <!-- First Name -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.FName" class="form-label">First Name</label>
+                            <input asp-for="UserInput.FName" class="form-control" />
+                            <span asp-validation-for="UserInput.FName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.LName" class="form-label">Last Name</label>
+                            <input asp-for="UserInput.LName" class="form-control" />
+                            <span asp-validation-for="UserInput.LName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Contact Number -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.ContactNo" class="form-label">Contact Number</label>
+                            <input asp-for="UserInput.ContactNo" class="form-control" />
+                            <span asp-validation-for="UserInput.ContactNo" class="text-danger"></span>
+                        </div>
+
+                        <!-- Hire Date -->
+                        <div class="col-md-6">
+                            <label asp-for="UserInput.HireDate" class="form-label">Hire Date</label>
+                            <input asp-for="UserInput.HireDate" type="date" class="form-control" />
+                            <span asp-validation-for="UserInput.HireDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Submit and Back Buttons -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary w-auto px-4">Register</button>
+                        <a asp-page="/Admin/Users/Index" class="btn btn-secondary w-auto px-4">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

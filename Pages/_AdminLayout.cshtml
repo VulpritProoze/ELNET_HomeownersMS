@@ -1,0 +1,80 @@
+@{
+    Layout = "_Layout"; // Inherit from main layout
+}
+
+@section Sidebar {
+    <!-- Header -->
+    <div class="headerPage">
+        <button id="sideNav_toggleBtn">
+            <i class="bi bi-list fs-4 p-2"></i>
+        </button>
+        <h3 class="m-0">@ViewData["HeaderTitle"]</h3>
+        <i class="bi bi-bell fs-4 p-2"></i>
+    </div>
+
+    <!-- Side Navigation -->
+    <div class="sideNavBar" id="sidenavBar">
+        <!-- User Profile Section -->
+        <div class="userProfile">
+            <i class="profileImage bi bi-person-circle"></i>
+            <div class="userInfo">
+                <p class="userName">@ViewData["Username"]</p>
+                <p class="userType">Admin</p>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="mainfunc_navLinks">
+            <a asp-page="/Dashboard/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Dashboard/Index" ? "active" : "")">
+                <i class="bi bi-house-door-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a asp-page="/Admin/Users/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Users/Index" ? "active" : "")">
+                <i class="bi bi-people-fill"></i>
+                <span>User Management</span>
+            </a>
+            <a asp-page="/Admin/Facilities/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Facilities/Index" ? "active" : "")">
+                <i class="bi bi-calendar-fill"></i>
+                <span>Facilities Management</span>
+            </a>
+            <a asp-page="/Admin/Residents/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Residents/Index" ? "active" : "")">
+                <i class="bi bi-megaphone-fill"></i>
+                <span>Announcements & Events</span>
+            </a>
+            <a asp-page="/Admin/Staffs/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Staffs/Index" ? "active" : "")">
+                <i class="bi bi-credit-card-fill"></i>
+                <span>Billings & Payments</span>
+            </a>
+                <a asp-page="/Resources" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Resources" ? "active" : "")">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span>Report & Analytics</span>
+            </a>
+                        <a asp-page="/Community" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Community" ? "active" : "")">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Community</span>
+            </a>
+            <a asp-page="/Resources" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Resources" ? "active" : "")">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Resources </span>
+            </a>
+        </div>
+
+        <div class="genfunc_navLinks">
+            <a asp-page="/Settings" class="navItem @(ViewData["CurrentPage"]?.ToString()?.StartsWith("/Settings") == true ? "active" : "")">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a asp-page="/Account/Logout" class="navItem @(ViewData["CurrentPage"]?.ToString()?.StartsWith("/Account/Logout") == true ? "active" : "")">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+}
+
+<!-- Main Content Area -->
+<div class="mainSection">
+    @RenderBody()
+</div>

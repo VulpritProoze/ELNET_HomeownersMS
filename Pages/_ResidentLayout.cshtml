@@ -18,65 +18,87 @@
         <button class="sideNav_toggleBtn" id="sideNav_toggleBtn">
             <i class="bi bi-list fs-4 p-2"></i>
         </button>
-        <h3 class="m-0">@ViewData["HeaderTitle"]</h3>
-        <a asp-page="/Notification/Notifications" class="sideNav_toggleBtn @(ViewData["CurrentPage"]?.ToString() == "/Notification/Notifications" ? "active" : "")">
+        <h3 class="m-0">
+            <a class="ghost-link" asp-page="/Dashboard/Index">@ViewData["HeaderTitle"]</a>
+        </h3>
+        <a asp-page="/Notification/Notifications"
+            class="sideNav_toggleBtn @(ViewData["CurrentPage"]?.ToString() == "/Notification/Notifications" ? "active" : "")">
             <i class="bi bi-bell fs-4 p-2"></i>
         </a>
     </div>
 
+    @{
+        var profileImageUrl = !string.IsNullOrEmpty(ViewData["ProfileImage"]?.ToString()) 
+            ? Url.Content($"~/{ViewData["ProfileImage"]}")
+            : Url.Content("~/images/default-profile.jpg");
+    }
+
     <!-- Side Navigation -->
     <div class="sideNavBar" id="sidenavBar">
         <!-- User Profile Section -->
-        <div class="userProfile">
-            <i class="profileImage bi bi-person-circle"></i>
-            <div class="userInfo">
-                <p class="userName">@ViewData["Username"]</p>
-                <p class="userType">Resident</p>
+        <a class="ghost-link" asp-page="/Profile/ProfileResident">
+            <div class="userProfile">
+                <img src="@profileImageUrl" class="profile-avatar"/>
+                <div class="userInfo">
+                    <p class="userName">@ViewData["Username"]</p>
+                    <p class="profile-name">@ViewData["ResidentName"]</p>
+                    <p class="userType">Resident</p>
+                </div>
             </div>
-        </div>
+        </a>
 
         <!-- Navigation Links -->
         <div class="mainfunc_navLinks">
-            <a asp-page="/Dashboard/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Dashboard/Index" ? "active" : "")">
+            <a asp-page="/Dashboard/Index"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Dashboard/Index" ? "active" : "")">
                 <i class="bi bi-house-door-fill"></i>
                 <span>Dashboard</span>
             </a>
-            <a asp-page="/Announcement/Announcement_Events" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Announcement/Announcement_Events" ? "active" : "")">
+            <a asp-page="/Announcement/Announcement_Events"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Announcement/Announcement_Events" ? "active" : "")">
                 <i class="bi bi-megaphone-fill"></i>
                 <span>Announcements</span>
             </a>
-            <a asp-page="/Reservation/Reservation" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Reservation/Reservation" ? "active" : "")">
+            <a asp-page="/Reservation/Reservation"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Reservation/Reservation" ? "active" : "")">
                 <i class="bi bi-calendar-fill"></i>
                 <span>Reservation</span>
             </a>
-            <a asp-page="/Billings_Payments/Payments" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Billings_Payments/Payments" ? "active" : "")">
+            @* <a asp-page="/Billings_Payments/Payments"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Billings_Payments/Payments" ? "active" : "")">
                 <i class="bi bi-credit-card-fill"></i>
                 <span>Billing & Payments</span>
-            </a>
-            <a asp-page="/Service/Service" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Service/Service" ? "active" : "")">
+            </a> *@
+            <a asp-page="/Service/Service"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Service/Service" ? "active" : "")">
                 <i class="bi bi-tools"></i>
                 <span>Service</span>
             </a>
-            <a asp-page="/Community/Community" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Community/Community" ? "active" : "")">
+            <a asp-page="/Community/Community"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Community/Community" ? "active" : "")">
                 <i class="bi bi-chat-left-text-fill"></i>
                 <span>Community</span>
             </a>
-            <a asp-page="/Resources/Resource" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Resources/Resource" ? "active" : "")">
+            <a asp-page="/Resources/Resource"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Resources/Resource" ? "active" : "")">
                 <i class="bi bi-file-earmark-text-fill"></i>
                 <span>Resources</span>
             </a>
-            <a asp-page="/Security/Security" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Security/Security" ? "active" : "")">
+            @* <a asp-page="/Security/Security"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Security/Security" ? "active" : "")">
                 <i class="bi bi-shield-shaded"></i>
                 <span>Security</span>
-            </a>
+            </a> *@
         </div>
 
         <div class="genfunc_navLinks">
-            <a asp-page="/Settings" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Settings" ? "active" : "")">
+            <a asp-page="/Settings"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Settings" ? "active" : "")">
                 <i class="bi bi-gear-fill"></i>
                 <span>Settings</span>
             </a>
-            <a asp-page="/Account/Logout" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Account/Logout" ? "active" : "")">
+            <a asp-page="/Account/Logout"
+                class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Account/Logout" ? "active" : "")">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Logout</span>
             </a>

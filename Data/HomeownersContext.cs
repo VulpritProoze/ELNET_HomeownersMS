@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HomeownersMS.Models;
+using System.Text.Json; // For JSON serialization
 
 namespace HomeownersMS.Data
 {
@@ -27,6 +28,7 @@ namespace HomeownersMS.Data
         public DbSet<CommunityVote> CommunityVotes { get; set; } = default!;
         public DbSet<CommunityComment> CommunityComments { get; set; } = default!;
         public DbSet<Resource> Resources { get; set; } = default!;
+        public DbSet<Event> Events { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,6 +86,12 @@ namespace HomeownersMS.Data
                 .HasForeignKey(fr => fr.FacilityId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<FacilityReview>()
+                .HasOne(fr => fr.Resident)
+                .WithMany()
+                .HasForeignKey(fr => fr.ResidentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Configure CommunityPost relationships
             modelBuilder.Entity<CommunityPost>()
                 .HasOne(cp => cp.User)
@@ -96,19 +104,19 @@ namespace HomeownersMS.Data
             {
                 // Primary key
                 entity.HasKey(v => v.CommunityVoteId);
-                
+
                 // Relationship with CommunityPost
                 entity.HasOne(v => v.Post)
                     .WithMany(p => p.Votes)
                     .HasForeignKey(v => v.CommunityPostId)
                     .OnDelete(DeleteBehavior.Cascade); // Delete votes when post is deleted
-                
+
                 // Relationship with User
                 entity.HasOne(v => v.User)
                     .WithMany(u => u.CommunityVotes)
                     .HasForeignKey(v => v.UserId)
                     .OnDelete(DeleteBehavior.Restrict); // Prevent user deletion if they have votes
-                
+
                 // Add unique constraint to prevent duplicate votes
                 entity.HasIndex(v => new { v.CommunityPostId, v.UserId })
                     .IsUnique();
@@ -139,6 +147,32 @@ namespace HomeownersMS.Data
                 .HasForeignKey(a => a.CreatedBy)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Add Event configuration
+            modelBuilder.Entity<Event>(entity =>
+            {
+                // Primary key
+                entity.HasKey(e => e.EventId);
+
+                // Relationship with User
+                entity.HasOne(e => e.User)
+                    .WithMany(r => r.Events) // Assuming User has ICollection<Event> Events
+                    .HasForeignKey(e => e.CreatedBy)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Configure the AdditionalServices dictionary to be stored as JSON
+                entity.Property(e => e.AdditionalServices)
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
+                        v => JsonSerializer.Deserialize<Dictionary<string, AdditionalServiceDetails>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, AdditionalServiceDetails>()
+                    );
+            });
+
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.FacilityRequest)
+                .WithMany()
+                .HasForeignKey(e => e.FacilityRequestId) // Specify the entity type explicitly
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Resident>().ToTable("Resident");
             modelBuilder.Entity<Staff>().ToTable("Staff");
@@ -147,11 +181,13 @@ namespace HomeownersMS.Data
             modelBuilder.Entity<ServiceRequest>().ToTable("ServiceRequest");
             modelBuilder.Entity<Facility>().ToTable("Facility");
             modelBuilder.Entity<FacilityRequest>().ToTable("FacilityRequest");
+            modelBuilder.Entity<FacilityReview>().ToTable("FacilityReview");
             modelBuilder.Entity<CommunityPost>().ToTable("CommunityPost");
             modelBuilder.Entity<CommunityVote>().ToTable("CommunityVote");
             modelBuilder.Entity<CommunityComment>().ToTable("CommunityComment");
             modelBuilder.Entity<Announcement>().ToTable("Announcement");
             modelBuilder.Entity<Resource>().ToTable("Resource");
+            modelBuilder.Entity<Event>().ToTable("Event");
         }
     }
 }

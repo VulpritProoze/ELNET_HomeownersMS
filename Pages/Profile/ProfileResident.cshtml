@@ -1,0 +1,91 @@
+@page
+@using HomeownersMS.Models
+@model HomeownersMS.Pages.Profile.ProfileResidentModel
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
+
+@{
+    Layout = "_ResidentLayout"; 
+    ViewData["HeaderTitle"] = "Profile";
+    ViewData["Title"] = "Profile";
+    var username = HttpContext?.User?.Identity?.Name ?? "Guest";
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "", name);
+            }
+        }
+        return ("", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
+    ViewData["Username"] = username;
+    ViewData["CurrentPage"] = currentPage;
+}
+
+<div class="container">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="form-group mb-3">
+            <label asp-for="ProfileImage" class="control-label">Profile Image</label>
+            <input type="file" class="form-control" asp-for="ProfileImage">
+            <span asp-validation-for="ProfileImage" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label asp-for="Resident.FName" class="control-label">First Name</label>
+            <input type="text" class="form-control" asp-for="Resident.FName">
+            <span asp-validation-for="Resident.FName" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label asp-for="Resident.LName" class="control-label">Last Name</label>
+            <input type="text" class="form-control" asp-for="Resident.LName">
+            <span asp-validation-for="Resident.LName" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label asp-for="Resident.Email" class="control-label">Email</label>
+            <input type="email" class="form-control" asp-for="Resident.Email">
+            <span asp-validation-for="Resident.Email" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label asp-for="Resident.ContactNo" class="control-label">Contact Number</label>
+            <input type="tel" class="form-control" asp-for="Resident.ContactNo">
+            <span asp-validation-for="Resident.ContactNo" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label asp-for="Resident.Address" class="control-label">Address</label>
+            <input type="text" class="form-control" asp-for="Resident.Address">
+            <span asp-validation-for="Resident.Address" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" value="Save Changes" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

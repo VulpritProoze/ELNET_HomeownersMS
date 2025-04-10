@@ -180,6 +180,61 @@ namespace HomeownersMS.Migrations
                     b.ToTable("CommunityVote", (string)null);
                 });
 
+            modelBuilder.Entity("HomeownersMS.Models.Event", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AdditionalServices")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ContactNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("EventDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly?>("EventTimeEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly?>("EventTimeStart")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EventType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("FacilityRequestId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("GuestCapacity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("FacilityRequestId");
+
+                    b.ToTable("Event", (string)null);
+                });
+
             modelBuilder.Entity("HomeownersMS.Models.Facility", b =>
                 {
                     b.Property<int>("FacilityId")
@@ -212,10 +267,13 @@ namespace HomeownersMS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("EmailAddress")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("FacilityId")
+                    b.Property<int>("FacilityId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FullName")
@@ -224,19 +282,13 @@ namespace HomeownersMS.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("RequestCompletionDate")
+                    b.Property<DateTime>("RequestDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly?>("ReservationDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeOnly?>("ReservationTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("ResidentId")
+                    b.Property<int>("ResidentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("FacilityRequestId");
@@ -263,6 +315,12 @@ namespace HomeownersMS.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("ResidentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ResidentUserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("ReviewDate")
                         .HasColumnType("TEXT");
 
@@ -270,7 +328,12 @@ namespace HomeownersMS.Migrations
 
                     b.HasIndex("FacilityId");
 
-                    b.ToTable("FacilityReviews");
+                    b.HasIndex("ResidentId");
+
+                    b.HasIndex("ResidentUserId")
+                        .IsUnique();
+
+                    b.ToTable("FacilityReview", (string)null);
                 });
 
             modelBuilder.Entity("HomeownersMS.Models.Resident", b =>
@@ -500,17 +563,36 @@ namespace HomeownersMS.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HomeownersMS.Models.Event", b =>
+                {
+                    b.HasOne("HomeownersMS.Models.User", "User")
+                        .WithMany("Events")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HomeownersMS.Models.FacilityRequest", "FacilityRequest")
+                        .WithMany()
+                        .HasForeignKey("FacilityRequestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("FacilityRequest");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HomeownersMS.Models.FacilityRequest", b =>
                 {
                     b.HasOne("HomeownersMS.Models.Facility", "Facility")
                         .WithMany()
                         .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.HasOne("HomeownersMS.Models.Resident", "Resident")
                         .WithMany()
                         .HasForeignKey("ResidentId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("Facility");
 
@@ -524,7 +606,18 @@ namespace HomeownersMS.Migrations
                         .HasForeignKey("FacilityId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("HomeownersMS.Models.Resident", "Resident")
+                        .WithMany()
+                        .HasForeignKey("ResidentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HomeownersMS.Models.Resident", null)
+                        .WithOne("FacilityReview")
+                        .HasForeignKey("HomeownersMS.Models.FacilityReview", "ResidentUserId");
+
                     b.Navigation("Facility");
+
+                    b.Navigation("Resident");
                 });
 
             modelBuilder.Entity("HomeownersMS.Models.Resident", b =>
@@ -600,6 +693,8 @@ namespace HomeownersMS.Migrations
 
             modelBuilder.Entity("HomeownersMS.Models.Resident", b =>
                 {
+                    b.Navigation("FacilityReview");
+
                     b.Navigation("ServiceRequests");
                 });
 
@@ -622,6 +717,8 @@ namespace HomeownersMS.Migrations
                     b.Navigation("CommunityPosts");
 
                     b.Navigation("CommunityVotes");
+
+                    b.Navigation("Events");
 
                     b.Navigation("Resident");
 

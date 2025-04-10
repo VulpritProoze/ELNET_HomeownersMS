@@ -1,0 +1,157 @@
+@page
+@using HomeownersMS.Models
+@model HomeownersMS.Pages.Reservation.ReserveModel
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
+
+@{
+    Layout = "_ResidentLayout"; 
+    ViewData["HeaderTitle"] = "Reservation Details";
+    ViewData["Title"] = @Model.Facility.Name ?? "Reservation Details";
+    var username = HttpContext?.User?.Identity?.Name ?? "Guest";
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "", name);
+            }
+        }
+        return ("", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
+    ViewData["Username"] = username;
+    ViewData["CurrentPage"] = currentPage;
+}
+
+<div class="container">
+    <div asp-validation-summary="All" class="text-danger"></div>    
+    <div class="row">
+        
+        <div class="col-md-6">
+            <form method="post">
+                <input type="hidden" asp-for="FacilityRequest.FacilityId" />
+                <input type="hidden" asp-for="FacilityRequest.ResidentId" />
+
+                <!-- Event Details Section -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold">Event Information</h6>
+                        <div class="form-group">
+                            <label asp-for="Event.Title" class="control-label">Event Name</label>
+                            <input asp-for="Event.Title" class="form-control" />
+                            <span asp-validation-for="Event.Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Event.EventType" class="control-label">Event Type</label>
+                            <select asp-for="Event.EventType" class="form-control" 
+                                    asp-items="Html.GetEnumSelectList<EventType>()">
+                                <option value="">-- Select Event Type --</option>
+                            </select>
+                            <span asp-validation-for="Event.EventType" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Event.GuestCapacity" class="control-label">Guest Capacity</label>
+                            <input asp-for="Event.GuestCapacity" class="form-control" />
+                            <span asp-validation-for="Event.GuestCapacity" class="text-danger"></span>
+                        </div>
+
+                        <h6 class="fw-bold">Schedule</h6>
+                        <div class="form-group">
+                            <label asp-for="Event.EventDate" class="control-label">Event Date</label>
+                            <input type="date" asp-for="Event.EventDate" class="form-control" />
+                            <span asp-validation-for="Event.EventDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Event.EventTimeStart" class="control-label">Starts With</label>
+                                    <input type="time" asp-for="Event.EventTimeStart" class="form-control" />
+                                    <span asp-validation-for="Event.EventTimeStart" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Event.EventTimeEnd" class="control-label">Ends With</label>
+                                    <input type="time" asp-for="Event.EventTimeEnd" class="form-control" />
+                                    <span asp-validation-for="Event.EventTimeEnd" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Personal Info Section -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold">Contact Information</h6>
+                        <div class="form-group">
+                            <label class="control-label">Full Name</label>
+                            <input asp-for="FacilityRequest.FullName" class="form-control" />
+                            <span asp-validation-for="FacilityRequest.FullName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label">Email Address</label>
+                            <input asp-for="FacilityRequest.EmailAddress" class="form-control" />
+                            <span asp-validation-for="FacilityRequest.EmailAddress" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label  class="control-label">Phone Number</label>
+                            <input asp-for="FacilityRequest.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="FacilityRequest.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+               <!-- Additional Services -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold">Additional Services</h6>
+                        <div class="form-group">
+                            @foreach (var service in typeof(PredefinedServices).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
+                            {
+                                var serviceDetails = (AdditionalServiceDetails)service.GetValue(null);
+                                <div class="form-check mb-3 p-3 border rounded">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" 
+                                                id="@service.Name" name="SelectedServices" 
+                                                value="@service.Name">
+                                            <label class="form-check-label fw-bold" for="@service.Name">
+                                                @serviceDetails.Name
+                                            </label>
+                                        </div>
+                                        <span class="text-primary fw-bold">₱ @(serviceDetails.Price)/hr</span>
+                                    </div>
+                                    <small class="text-muted">@serviceDetails.Description</small>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <input type="submit" value="Submit Request" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

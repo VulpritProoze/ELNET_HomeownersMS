@@ -1,0 +1,200 @@
+@page
+@model HomeownersMS.Pages.Admin.Reservations.ManageReservationsModel
+@using HomeownersMS.Models
+@using Newtonsoft.Json
+
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Manage Reservations";
+    ViewData["HeaderTitle"] = "Manage Reservations"; 
+}
+
+<div class="container">
+    <h2>Facility Reservation Requests</h2>
+    
+    @if (Model.Reservations.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Facility</th>
+                        <th>Resident</th>
+                        <th>Event Title</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Additional Services</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reservation in Model.Reservations)
+                    {
+                        <tr>
+                            <td>@reservation.Facility?.Name</td>
+                            <td>@($"{reservation.Resident?.FName} {reservation.Resident?.LName}")</td>
+                            <td>@reservation.Event?.Title</td>
+                            <td>@reservation.Event?.EventDate?.ToShortDateString()</td>
+                            <td>
+                                @reservation.Event?.EventTimeStart?.ToString("hh\\:mm") - 
+                                @reservation.Event?.EventTimeEnd?.ToString("hh\\:mm")
+                            </td>
+                            <td>
+                                <span class="badge 
+                                    @(reservation.FacilityRequest?.Status == RequestStatus.Approved ? "bg-success" :
+                                      reservation.FacilityRequest?.Status == RequestStatus.Declined ? "bg-danger" : "bg-warning")">
+                                    @reservation.FacilityRequest?.Status
+                                </span>
+                            </td>
+                            <td>
+                                @if (reservation.Event?.AdditionalServices?.Any() == true)
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-primary view-services-btn" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#servicesModal"
+                                            data-services='@Html.Raw(JsonConvert.SerializeObject(reservation.Event.AdditionalServices))'>
+                                        View Services (@reservation.Event.AdditionalServices.Count)
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">None</span>
+                                }
+                            </td>
+                            <td>
+                                @if (reservation.FacilityRequest?.Status == RequestStatus.Pending)
+                                {
+                                    <form method="post" asp-page-handler="Approve" class="d-inline">
+                                        <input type="hidden" name="id" value="@reservation.FacilityRequest.FacilityRequestId" />
+                                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#declineModal"
+                                            data-id="@reservation.FacilityRequest.FacilityRequestId">
+                                        Decline
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No reservation requests found.
+        </div>
+    }
+</div>
+
+<!-- Decline Modal -->
+<div class="modal fade" id="declineModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Decline Reservation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" asp-page-handler="Decline">
+                <div class="modal-body">
+                    <p>Are you sure you want to decline this reservation?</p>
+                    <input type="hidden" name="id" id="declineReservationId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Confirm Decline</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Services Modal -->
+<div class="modal fade" id="servicesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Additional Services</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Description</th>
+                            <th class="text-end">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="servicesList">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2" class="text-end">Total:</th>
+                            <th class="text-end" id="servicesTotal"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Decline modal handler
+            $('#declineModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                $('#declineReservationId').val(id);
+            });
+
+            // Services modal handler
+            $('#servicesModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                try {
+                    console.log(button.data('services'));
+                    var services = button.data('services');
+                    
+                    var servicesList = $('#servicesList');
+                    servicesList.empty();
+                    
+                    var total = 0;
+                    
+                    Object.entries(services).forEach(([key, service]) => {
+                        servicesList.append(`
+                            <tr>
+                                <td>${service.Name || service.name}</td>
+                                <td>${service.Description || service.description}</td>
+                                <td class="text-end">₱${service.Price || service.price}/hr</td>
+                            </tr>
+                        `);
+                        total += service.Price || service.price;
+                    });
+                    
+                    // Format the total with commas
+                    var formattedTotal = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'PHP',
+                        minimumFractionDigits: 2
+                    }).format(total);
+
+                    $('#servicesTotal').text(formattedTotal);
+                } catch (e) {
+                    console.error("Error parsing services data:", e);
+                    $('#servicesList').html('<tr><td colspan="3" class="text-danger">Error loading services data</td></tr>');
+                }
+            });
+        });
+    </script>
+}

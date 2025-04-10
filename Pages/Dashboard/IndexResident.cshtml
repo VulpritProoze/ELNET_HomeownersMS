@@ -1,172 +1,447 @@
 ﻿@page
 @model HomeownersMS.Pages.Dashboard.IndexResidentModel
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
 @{
-    Layout = "_ResidentLayout"; // Use the Admin layout
+    Layout = "_ResidentLayout";
     ViewData["HeaderTitle"] = "Dashboard";
     ViewData["Title"] = "Dashboard";
     var username = HttpContext?.User?.Identity?.Name ?? "Guest";
     var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "", name);
+            }
+        }
+        return ("", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
     ViewData["Username"] = username;
     ViewData["CurrentPage"] = currentPage;
 }
+
+<!-- Add FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+
 <style>
-    .no-announcements {
+    /* General styles */
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        background-color: white;
+    }
+
+    .card-header {
+        border-bottom: 1px solid #eee;
+        padding: 12px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Announcement cards */
+    .ann-Card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+
+    .ann-Card .header {
+        padding: 8px 12px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+    }
+
+    .ann-Card .header .icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        color: white;
+    }
+
+    .ann-Card .content {
+        padding: 12px;
+    }
+
+    /* Security logs and billing styles */
+    .secTags,
+    .duePrices {
+        font-weight: bold;
+    }
+
+    .secTags {
+        color: white;
+        background-color: #28a745;
+        border-radius: 4px;
+        padding: 2px 6px;
+        display: inline-block;
+    }
+
+    /* Calendar styles */
+    #calendar {
+        height: 100%;
+        min-height: 300px;
+        font-size: 14px;
+    }
+
+    /* Card body should expand to contain calendar */
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        min-height: 350px;
+        /* Minimum height for calendar */
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 992px) {
+        #calendar {
+            min-height: 250px;
+        }
+
+        .card-body {
+            min-height: 300px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        #calendar {
+            min-height: 200px;
+        }
+
+        .card-body {
+            min-height: 250px;
+        }
+    }
+
+    /* Custom button styling */
+    .show-more-btn {
+        background-color: transparent;
+        border: 1px solid #ddd;
+        color: #333;
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
         text-align: center;
-        color: #6c757d;
-        font-style: italic;
+        transition: all 0.3s;
+    }
+
+    .show-more-btn:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Selected date highlight */
+    .fc-daygrid-day.selected {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    /* Event Card Styles */
+    .event-card {
+        border-left: 4px solid var(--primary);
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin-bottom: 12px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+    }
+
+    .event-card:hover {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .event-date {
+        font-size: 0.95rem;
+        color: var(--primary);
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .event-time {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .event-location {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    .event-location i {
+        margin-right: 5px;
+        color: var(--primary);
+    }
+
+    .event-title {
+        font-weight: 500;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    /* No events message styling */
+    #events-container > p {
+        text-align: center;
+        color: #666;
+        padding: 10px;
     }
 </style>
 
 <div class="row">
     <!-- Announcement Section -->
     <div class="col-12 col-md-6 col-lg-4">
-        <div id="announcementSection">
-            <div class="Title-ViewAll">
-                <p class="fs-4 m-0">Announcement</p>
-                <a asp-page="/Announcement/Announcement_Events" class="text-primary @(ViewData["CurrentPage"]?.ToString() == "/Dashboard/Index" ? "active" : "")">View All</a>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Announcements</h5>
+                <a asp-page="/Announcement/Announcement_Events" class="text-primary">View All</a>
             </div>
-            <div id="announcementCards" class="row">
-                @if (Model.LatestAnnouncements.Any())
-                {
-                    @foreach (var announcement in Model.LatestAnnouncements)
+            <div class="card-body">
+                <div id="announcementCards">
+                    @if (Model.LatestAnnouncements.Any())
                     {
-                        <div class="ann-Card">
-                            <div class="header">
-                                <i class="bi bi-trash-fill icon" style="background-color: #28a745;"></i>
-                                <span>@announcement.Title</span>
+                        @foreach (var announcement in Model.LatestAnnouncements)
+                        {
+                            <div class="ann-Card">
+                                <div class="header">
+                                    @{
+                                        string iconClass = "bi bi-megaphone-fill";
+                                        string iconColor = "#28a745";
+
+                                        if (announcement.Title.Contains("Clean-Up", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            iconClass = "bi bi-trash-fill";
+                                            iconColor = "#28a745";
+                                        }
+                                        else if (announcement.Title.Contains("Interruption", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            iconClass = "bi bi-lightning-fill";
+                                            iconColor = "#dc3545";
+                                        }
+                                    }
+                                    <i class="@iconClass icon" style="background-color: @iconColor;"></i>
+                                    <span>@announcement.Title</span>
+                                </div>
+                                <div class="content">
+                                    @if (announcement.EventDate.HasValue)
+                                    {
+                                        <p><strong>@announcement.EventDate.Value.ToString("MMM dd")</strong></p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(announcement.BlocksAffected))
+                                    {
+                                        <p><strong>Block @announcement.BlocksAffected</strong></p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(announcement.Office))
+                                    {
+                                        <p>@announcement.Office</p>
+                                    }
+                                    @if (announcement.ContactNumber.HasValue)
+                                    {
+                                        <p><a href="tel:@announcement.ContactNumber">@announcement.ContactNumber</a></p>
+                                    }
+                                    <p>@announcement.Content</p>
+                                </div>
                             </div>
-                            <div class="content">
-                                <!-- Use string interpolation to format EventDate and EventTime -->
-                                <p><strong>@($"{announcement.EventDate:MMMM d} @ {announcement.EventTime:hh\\:mm tt}")</strong></p>
-                                <p><strong>Block @announcement.BlocksAffected</strong></p>
-                                <p>@announcement.Office - <a href="tel:@announcement.ContactNumber">@announcement.ContactNumber</a></p>
-                                <p>@announcement.Content</p>
-                            </div>
-                        </div>
+                        }
                     }
-                }
-                else
-                {
-                    <div class="no-announcements">
-                        No announcements found.
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-
-    <!-- Table Summaries -->
-    <div class="col-12 col-md-6 col-lg-4">
-        <div id="tableSummaries">
-            <div id="upcomingbillsSummary" class="mb-4">
-                <p class="fs-5 fw-bold m-0">Billing Summary</p>
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td class="dueNames">Monthly HOA</td>
-                            <td class="dueDates">Feb. 15, 2025</td>
-                            <td class="duePrices">₱ 250.00</td>
-                        </tr>
-                        <tr>
-                            <td class="dueNames">Monthly HOA</td>
-                            <td class="dueDates">Feb. 15, 2025</td>
-                            <td class="duePrices">₱ 250.00</td>
-                        </tr>
-                        <tr>
-                            <td class="dueNames">Monthly HOA</td>
-                            <td class="dueDates">Feb. 15, 2025</td>
-                            <td class="duePrices">₱ 250.00</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a asp-page="/Billings_Payments/Payments" class="viewall_Btn btn btn-primary @(ViewData["CurrentPage"]?.ToString() == "/Billings_Payments/Payments" ? "active" : "")">View All</a>
-            </div>
-            <div id="securityLogs">
-                <p class="fs-5 fw-bold m-0">Security Logs</p>
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td class="secDates">Feb. 15, 2025
-                                <p class="secTimes">10:30 - 7:30 PM</p>
-                            </td>
-                            <td class="secAbout">Visitor Entry</td>
-                            <td class="secTags">Approved</td>
-                        </tr>
-                        <tr>
-                            <td class="secDates">Feb. 15, 2025
-                                <p class="secTimes">10:30 - 7:30 PM</p>
-                            </td>
-                            <td class="secAbout">Visitor Entry</td>
-                            <td class="secTags">Approved</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a asp-page="/Security/Security" class="viewall_Btn btn btn-primary @(ViewData["CurrentPage"]?.ToString() == "/Security/Security" ? "active" : "")">View All</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Events Section -->
-    <div class="col-12 col-lg-4">
-        <div id="eventsSection">
-            <div id="calendarSection" class="mb-4">
-                <p class="fs-5 fw-bold m-0">Event Calendar</p>
-                <!-- Checkbox to include/exclude announcements -->
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="includeAnnouncements" checked>
-                    <label class="form-check-label" for="includeAnnouncements">Include Announcements</label>
+                    else
+                    {
+                        <p>No recent announcements</p>
+                    }
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar and Events Section -->
+    <div class="col-12 col-lg-4">
+        <!-- Calendar Card -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">Calendar</h5>
+                <button id="reset-calendar" class="btn btn-sm btn-outline-secondary">Show All</button>
+            </div>
+            <div class="card-body">
+                @* Calendar shows here *@
                 <div id="calendar"></div>
             </div>
-            <div id="timelineSection">
-                <p class="fs-5 fw-bold m-0">Upcoming Events</p>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <span class="timeline-date">Feb 15, 2025</span>
-                        <p class="timeline-event">HOA Monthly Meeting at 10:00 AM</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="timeline-date">Feb 20, 2025</span>
-                        <p class="timeline-event">Community Clean-Up Drive</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="timeline-date">Feb 25, 2025</span>
-                        <p class="timeline-event">Security Drill</p>
-                    </div>
+        </div>
+
+        <!-- Events -->
+        <div class="card mt-4" id="events">
+            <div class="card-header">
+                <h5 class="m-0">Events</h5>
+            </div>
+            <div class="card-body">
+                <div id="events-container">
+                    @if (Model.AllEvents.Any())
+                    {
+                        foreach (var evt in Model.AllEvents)
+                        {
+                            <div class="event-card" data-event-date="@evt.EventDate?.ToString("yyyy-MM-dd")">
+                                <div class="event-date">
+                                    <strong>@(evt.EventDate.HasValue ? evt.EventDate?.ToString("ddd, MMM dd yyyy") : "n.d")</strong>
+                                </div>
+                                <div class="event-time">
+                                    <strong>
+                                        @(evt.EventTimeStart.HasValue ? evt.EventTimeStart.Value.ToString("h:mm tt") : "--:--")
+                                        @(evt.EventTimeEnd.HasValue ? " - " + evt.EventTimeEnd.Value.ToString("h:mm tt") : "")
+                                    </strong>
+                                </div>
+                                <div class="event-location">
+                                    <i class="bi bi-geo-alt"></i> @evt.FacilityRequest?.Facility?.Name
+                                </div>
+                                <div class="event-title">@evt.Title</div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No events</p>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Add FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Initialize calendar
         var calendarEl = document.getElementById('calendar');
-
-        // Fetch calendar events from the backend
-        var calendarEvents = @Html.Raw(Json.Serialize(Model.CalendarEvents));
-
-        // Log the calendar events for debugging
-        console.log("Calendar Events:", calendarEvents);
-
-        // Initialize FullCalendar
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
-            events: calendarEvents.map(evt => ({
-                title: evt.title,
-                start: evt.start, // Ensure this is a valid date string
-                description: `${evt.description} (${evt.eventTime})` // Include event time in the description
-            })),
-            eventContent: function (arg) {
-                // Customize event content
-                return {
-                    html: `<div class="fc-event-title">${arg.event.title}</div>
-                           <div class="fc-event-description">${arg.event.extendedProps.description}</div>`
-                };
-            }
+            headerToolbar: {
+                left: 'prev',
+                center: 'title',
+                right: 'next'
+            },
+            height: 'auto',
+            contentHeight: 'auto',
+            aspectRatio: 1.5, // Better aspect ratio for responsiveness
+            dayMaxEventRows: true,
+            firstDay: 1, // Start week on Monday
+            dateClick: function (info) {
+                // Remove previous selection
+                document.querySelectorAll('.fc-daygrid-day.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+
+                // Add selection to clicked date
+                info.dayEl.classList.add('selected');
+
+                // Load events for selected date via AJAX
+                loadEventsForDate(info.dateStr);
+            },
+            datesSet: function () {
+                // Highlight today by default if no date is selected
+                @if (!Model.SelectedDate.HasValue)
+                    {
+                        <text>
+                            const today = new Date();
+                            const todayStr = today.toISOString().split('T')[0];
+                            const todayEl = document.querySelector(`.fc-day[data-date="${todayStr}"]`);
+                            if (todayEl) {
+                                todayEl.classList.add('selected');
+                    }
+                        </text>
+                }
+                    else
+                    {
+                        <text>
+                    // Highlight the selected date
+                            const selectedDateStr = '@Model.SelectedDate.Value.ToString("yyyy-MM-dd")';
+                            const selectedEl = document.querySelector(`.fc-day[data-date="${selectedDateStr}"]`);
+                            if (selectedEl) {
+                                selectedEl.classList.add('selected');
+                    }
+                        </text>
+                }
+        }
         });
 
         calendar.render();
+
+        // Function to load events for a specific date
+        function loadEventsForDate(dateStr) {
+            const date = new Date(dateStr);
+            const formattedDate = date.toISOString().split('T')[0];
+            
+            fetch(`?handler=FilterEvents&date=${formattedDate}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('events-container').innerHTML = html;
+                    // Add the same hover effects to newly loaded cards
+                    document.querySelectorAll('.event-card').forEach(card => {
+                        card.addEventListener('mouseenter', function() {
+                            this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                            this.style.transform = 'translateY(-2px)';
+                        });
+                        card.addEventListener('mouseleave', function() {
+                            this.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+                            this.style.transform = 'translateY(0)';
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading events:', error);
+                });
+        }
+
+        // Reset button functionality
+        document.getElementById('reset-calendar').addEventListener('click', function () {
+            // Remove all selections
+            document.querySelectorAll('.fc-daygrid-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Reload all events
+            fetch('?handler=FilterEvents')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('events-container').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error resetting events:', error);
+                });
+        });
+
+        // Make calendar responsive
+        function handleResize() {
+            calendar.updateSize();
+        }
+
+        // Add resize event listener
+        window.addEventListener('resize', handleResize);
+
+        // Initial size update
+        handleResize();
     });
 </script>

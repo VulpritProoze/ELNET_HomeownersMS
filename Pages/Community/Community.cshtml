@@ -1,7 +1,11 @@
 @page
 @model HomeownersMS.Pages.Community.CommunityModel
-@using HomeownersMS.Models
 @using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
+@using HomeownersMS.Models
 @inject IAuthorizationService AuthorizationService
 @{
     Layout = "_ResidentLayout";
@@ -9,75 +13,191 @@
     ViewData["Title"] = "Community";
     var username = HttpContext?.User?.Identity?.Name ?? "Guest";
     var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "", name);
+            }
+        }
+        return ("", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
     ViewData["Username"] = username;
     ViewData["CurrentPage"] = currentPage;
 }
 
 <style>
-    .community-container {
+    /* Add to your existing styles */
+    .community-wrapper {
+        display: flex;
+        gap: 20px;
+        position: relative;
+    }
+
+    .community-main {
+        flex: 1;
         max-width: 800px;
+    }
+
+    .community-sidebar {
+        width: 300px;
+        position: sticky;
+        top: 60px;
+        /* Adjust based on your header height */
+        align-self: flex-start;
+        height: calc(100vh - 40px);
+        /* Full viewport height minus some padding */
+        overflow-y: auto;
+        /* Enable scrolling if content is too long */
+    }
+
+    .community-wrapper {
+        display: flex;
+        gap: 20px;
+    }
+
+    .community-main {
+        flex: 1;
+        max-width: 800px;
+    }
+
+    .community-sidebar {
+        width: 300px;
+    }
+
+    .community-container {
         margin: auto;
     }
+
     .header-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-        background-color: #1E4976;
+        background-color: #2c5887;
         color: white;
         border-radius: 5px;
+        margin-bottom: 15px;
     }
+
     .action-buttons button {
-        background-color: #1E4976;
+        background-color: #2c5887;
         color: white;
-        border: none;
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 8px 12px;
         border-radius: 5px;
         cursor: pointer;
         margin-right: 5px;
+        display: flex;
+        align-items: center;
     }
+
+    .action-buttons button i {
+        margin-right: 5px;
+    }
+
     .post-card {
-        border: 1px solid #ddd;
+        border: 1px solid #eee;
         border-radius: 8px;
         padding: 15px;
-        background-color: #f9f9f9;
+        background-color: #ffffff;
         margin-bottom: 15px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
+
+    .search-container {
+        position: relative;
+        margin-bottom: 15px;
+    }
+
     .search-box {
         width: 100%;
-        padding: 8px;
+        padding: 10px;
+        padding-right: 40px;
         border: 1px solid #ddd;
         border-radius: 5px;
+        font-size: 14px;
     }
+
+    .search-icon {
+        position: absolute;
+        right: 12px;
+        top: 10px;
+        color: #777;
+    }
+
     .post-icons {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-top: 10px;
     }
+
+    .reaction-icons {
+        display: flex;
+        align-items: center;
+    }
+
     .reaction-icons span {
-        margin-right: 10px;
+        margin-right: 15px;
         font-size: 14px;
+        display: flex;
+        align-items: center;
     }
+
+    .reaction-icons span i {
+        margin-right: 5px;
+    }
+
     .see-more {
         display: block;
         text-align: center;
-        background-color: #1E4976;
+        background-color: #2c5887;
         color: white;
         padding: 10px;
         border-radius: 5px;
         margin-top: 10px;
+        text-decoration: none;
     }
+
     .new-thread {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: #f1f1f1;
-        padding: 10px;
+        background-color: #ffffff;
+        padding: 10px 15px;
         border-radius: 8px;
         margin-bottom: 15px;
-        margin-top: 20px;
+        border: 1px solid #eee;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
+
+    .new-thread-text {
+        color: #777;
+        flex-grow: 1;
+    }
+
+    .new-thread-button {
+        background-color: #2c5887;
+        color: white;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
     .badge {
         display: inline-block;
         padding: 0.25em 0.4em;
@@ -90,45 +210,57 @@
         border-radius: 0.25rem;
         margin-right: 5px;
     }
+
     .badge-concern {
         background-color: #dc3545;
         color: white;
     }
+
     .badge-suggestion {
         background-color: #28a745;
         color: white;
     }
+
     .badge-general {
         background-color: #17a2b8;
         color: white;
     }
+
     .badge-advice {
         background-color: #ffc107;
         color: #212529;
     }
+
     .badge-role {
         background-color: #6c757d;
         color: white;
     }
+
     .post-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 5px;
+        align-items: flex-start;
+        margin-bottom: 10px;
     }
+
     .post-meta {
         display: flex;
         align-items: center;
     }
+
     .post-author {
         font-weight: bold;
+        margin-bottom: 5px;
     }
+
     .form-group {
         margin-bottom: 15px;
     }
+
     textarea.form-control {
         min-height: 100px;
     }
+
     /* comment styles */
     .comments-section {
         border-top: 1px solid #eee;
@@ -150,8 +282,10 @@
         font-size: 0.9rem;
         color: #6c757d;
     }
+
     /* edit post */
-    .edit-post-btn, .edit-comment-btn {
+    .edit-post-btn,
+    .edit-comment-btn {
         margin-left: 10px;
         font-size: 0.8rem;
         padding: 0.15rem 0.5rem;
@@ -164,7 +298,6 @@
     }
 
     /* delete button */
-    /* Add to your style section */
     .btn-group {
         display: inline-flex;
         margin-left: 10px;
@@ -191,212 +324,530 @@
         justify-content: flex-end;
         gap: 5px;
     }
-    /* Upvote/downvote button */
-    /* Voting styles */
-    .vote-buttons {
-        display: flex;
-        align-items: center;
-        gap: 5px;
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        overflow: hidden;
     }
 
-    .btn-vote {
+    .user-info {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .post-content {
+        margin-bottom: 15px;
+    }
+
+    .read-more {
+        color: #2c5887;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    /* New thread form styles */
+    .new-thread-form {
+        background-color: #fff;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        display: none;
+    }
+
+    .thread-form-active {
+        display: block;
+    }
+
+    /*vote*/
+    .vote-btn {
         cursor: pointer;
-        padding: 2px 5px;
-        border-radius: 3px;
+        color: #000;
+    }
+
+    /* Active state styling */
+    .vote-btn.upvote.active {
+        color: #28a745;
+        /* Green for upvote */
+    }
+
+    .vote-btn.downvote.active {
+        color: #dc3545;
+        /* Red for downvote */
+    }
+
+    .badges {
+        margin-left: 8px;
+    }
+
+    /* Contacts sidebar */
+    .contacts-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eee;
+    }
+
+    .contacts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .contacts-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #2c5887;
+    }
+
+    .contacts-search {
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .contacts-search input {
+        width: 100%;
+        padding: 8px 30px 8px 10px;
         border: 1px solid #ddd;
-        background: none;
-        transition: all 0.2s;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .contacts-search i {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        color: #777;
+    }
+
+    .contact-item {
         display: flex;
         align-items: center;
-        gap: 3px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .contact-item:last-child {
+        border-bottom: none;
+    }
+
+    .contact-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        overflow: hidden;
+    }
+
+    .contact-info {
+        flex: 1;
+    }
+
+    .contact-name {
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+
+    .contact-role {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .contact-status {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #28a745;
+    }
+
+    .contact-status.offline {
+        background-color: #6c757d;
+    }
+
+    .contact-status.away {
+        background-color: #ffc107;
+    }
+
+    .contacts-category {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin: 15px 0 5px 0;
+        text-transform: uppercase;
+    }
+
+    /*  Upvote/downvote styles */
+    .btn-vote {
+        background: none;
+        border: none;
+        padding: 0 5px;
+        color: #6c757d;
+        /* Default gray color */
+        cursor: pointer;
+        transition: color 0.2s;
+        font-size: 1rem;
+    }
+
+    .btn-vote i {
+        margin-right: 3px;
     }
 
     .btn-vote:hover {
-        background-color: #f0f0f0;
+        color: #495057;
+        /* Slightly darker on hover */
     }
 
     .btn-vote.active {
+        color: #2c5887;
+        /* Active color */
+    }
+
+    .btn-vote.upvote-btn.active {
+        color: #28a745;
+        /* Green for active upvote */
+    }
+
+    .btn-vote.downvote-btn.active {
+        color: #dc3545;
+        /* Red for active downvote */
+    }
+
+    .vote-count {
+        margin-left: 3px;
+        font-size: 0.9em;
+    }
+
+    .net-votes {
+        margin: 0 5px;
         font-weight: bold;
-    }
-
-    .upvote-btn.active {
-        color: #4CAF50;
-        border-color: #4CAF50;
-    }
-
-    .downvote-btn.active {
-        color: #F44336;
-        border-color: #F44336;
+        color: #2c5887;
     }
 </style>
 
-<h2 class="text-center">Community</h2>
-
-<div class="community-container">
-    <div class="header-bar">
-        <div class="action-buttons">
-            <button>Sort By</button>
-            <button>Filter By</button>
-        </div>
-    </div>
-    <br>
-    
-    <input type="text" class="search-box" placeholder="Search...">
-
-    <!-- Add a New Thread -->
-    @if (User.Identity.IsAuthenticated)
-    {
-        <div class="new-thread">
-            <form method="post">
-                <div class="form-group">
-                    <input type="text" class="form-control search-box" name="Title" placeholder="Thread Title" required>
+<div class="community-wrapper">
+    <div class="community-main">
+        <div class="community-container">
+            <div class="header-bar">
+                <div class="action-buttons" style="display: flex; gap: 10px;">
+                    <button><i class="fas fa-sort"></i> Sort By</button>
+                    <button><i class="fas fa-filter"></i> Filter By</button>
                 </div>
-                <div class="form-group">
-                    <textarea class="form-control search-box" name="Content" placeholder="Thread Content" required></textarea>
-                </div>
-                <div class="form-group">
-                    <select name="Type" class="form-control search-box" required>
-                        <option value="">Select a category</option>
-                        <option value="@CommunityPost.Types.concern">Concern</option>
-                        <option value="@CommunityPost.Types.suggestion">Suggestion</option>
-                        <option value="@CommunityPost.Types.general">General</option>
-                        <option value="@CommunityPost.Types.advice">Advice</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Thread</button>
-            </form>
-        </div>
-    }
+            </div>
 
-    <!-- Display Posts -->
-    @if (Model.Posts != null && Model.Posts.Any())
-    {
-        foreach (var post in Model.Posts)
-        {
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="post-meta">
-                        <span class="post-author">@post.User?.Username</span>
-                        @if (post.Type.HasValue)
-                        {
-                            <span class="badge badge-@post.Type.ToString().ToLower()">@post.Type</span>
-                        }
-                        @if (post.User != null)
-                        {
-                            <span class="badge badge-role">@post.User.Privilege.ToString()</span>
-                        }
-                    </div>
-                    @* <!-- Add delete button and edit button for posts --> *@
-                    @if (User.Identity.IsAuthenticated && post.CreatedBy == int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
-                    {
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline-primary edit-post-btn" 
-                                    data-post-id="@post.CommunityPostId"
-                                    data-original-title="@post.Title"
-                                    data-original-content="@post.Content"
-                                    data-original-type="@post.Type">
-                                Edit
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger delete-post-btn" 
-                                    data-post-id="@post.CommunityPostId">
-                                Delete
-                            </button>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Search...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <!-- Add a New Thread Button -->
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="new-thread" id="new-thread-button">
+                    <div class="new-thread-text">Add a New Thread</div>
+                    <button class="new-thread-button">+</button>
+                </div>
+
+                @* <!-- New Thread Form (Initially Hidden) --> *@
+                <div class="new-thread-form" id="new-thread-form">
+                    <form method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="Title" placeholder="Thread Title" required>
                         </div>
-                    }
-                    <small>@post.CreatedAt.ToString("g")</small>
+                        <div class="form-group">
+                            <textarea class="form-control" name="Content" placeholder="Thread Content" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <select name="Type" class="form-control" required>
+                                <option value="">Select a category</option>
+                                <option value="@CommunityPost.Types.concern">Concern</option>
+                                <option value="@CommunityPost.Types.suggestion">Suggestion</option>
+                                <option value="@CommunityPost.Types.general">General</option>
+                                <option value="@CommunityPost.Types.advice">Advice</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" id="cancel-thread">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Post Thread</button>
+                        </div>
+                    </form>
                 </div>
-                <h4>@post.Title</h4>
-                <p>@post.Content</p>
-                <div class="post-icons">
-                    <div class="reaction-icons">
-                        <span class="vote-buttons">
-                            @{
-                                var userId = User.Identity.IsAuthenticated ? 
-                                    int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) : 0;
-                                var userVote = post.Votes.FirstOrDefault(v => v.UserId == userId)?.IsUpvote;
-                            }
-                            <button type="button" class="btn-vote upvote-btn @(userVote == true ? "active" : "")" 
-                                    data-post-id="@post.CommunityPostId" data-is-upvote="true">
-                                👍 <span class="upvote-count">@post.Votes.Count(v => v.IsUpvote == true)</span>
-                            </button>
-                            @* Vote count is not being reflected! *@
-                            <span class="net-votes" data-post-id="@post.CommunityPostId">@(post.Votes.Count(v => v.IsUpvote == true) - @post.Votes.Count(v => v.IsUpvote == false))</span>
-                            <button type="button" class="btn-vote downvote-btn @(userVote == false ? "active" : "")" 
-                                    data-post-id="@post.CommunityPostId" data-is-upvote="false">
-                                👎 <span class="downvote-count">@post.Votes.Count(v => v.IsUpvote == false)</span>
-                            </button>
-                        </span>
-                    </div>
-                    <span>💬 @(post.Comments?.Count ?? 0)</span>
-                </div>
-                @* <!-- Inside your post-card div, after the post-icons div --> *@
-                <div class="comments-section mt-3">
-                    @* <!-- Comment count --> *@
-                    <div class="comment-count mb-2">
-                        <span>💬 @(post.Comments?.Count ?? 0) comments</span>
-                    </div>
-                    
-                    @* <!-- Comments list (initially hidden) --> *@
-                    <div class="comments-list collapse" id="comments-@post.CommunityPostId">
-                        @foreach (var comment in post.Comments ?? new List<CommunityComment>())
-                        {
-                            <div class="comment-card mb-2 p-2 border rounded">
-                                <div class="d-flex justify-content-between">
-                                    <strong>@comment.User?.Username</strong>
-                                    <small class="text-muted">@comment.CreatedAt.ToString("g")</small>
+            }
+
+            @if (Model.Posts != null && Model.Posts.Any())
+            {
+                foreach (var post in Model.Posts)
+                {
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=@(post.User?.Username ?? "User")&background=2c5887&color=fff"
+                                        alt="User Avatar" width="40" height="40">
                                 </div>
-                                <p class="mb-0">@comment.Content</p>
-                                @* <!-- Add delete button and edit button for comments --> *@
-                                @if (User.Identity.IsAuthenticated && comment.UserId == int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+                                <div class="user-details">
+                                    <div class="post-author">@post.User?.Username</div>
+                                    <div class="badges">
+                                        @if (post.Type.HasValue)
+                                        {
+                                            <span class="badge badge-@post.Type.ToString().ToLower()">@post.Type</span>
+                                        }
+                                        @if (post.User != null)
+                                        {
+                                            <span class="badge badge-role">@post.User.Privilege.ToString()</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start">
+                                @if (User.Identity.IsAuthenticated && post.CreatedBy ==
+                                                        int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
                                 {
-                                    <div class="comment-actions">
-                                        <button class="btn btn-sm btn-outline-primary edit-comment-btn" 
-                                                data-comment-id="@comment.CommunityCommentId"
-                                                data-original-content="@comment.Content">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary edit-post-btn"
+                                            data-post-id="@post.CommunityPostId" data-original-title="@post.Title"
+                                            data-original-content="@post.Content" data-original-type="@post.Type">
                                             Edit
                                         </button>
-                                        <button class="btn btn-sm btn-outline-danger delete-comment-btn" 
-                                                data-comment-id="@comment.CommunityCommentId">
+                                        <button class="btn btn-sm btn-outline-danger delete-post-btn"
+                                            data-post-id="@post.CommunityPostId">
                                             Delete
                                         </button>
                                     </div>
                                 }
+                                <small class="text-muted ms-2">@post.CreatedAt.ToString("g")</small>
                             </div>
-                        }
+                        </div>
+                        <h4>@post.Title</h4>
+                        <div class="post-content">
+                            @if (post.Content.Length > 150)
+                            {
+                                @post.Content.Substring(0, 150)
+                                <span id="dots-@post.CommunityPostId">...</span>
+                                <span id="more-@post.CommunityPostId" style="display:none">@post.Content.Substring(150)</span>
+                                <a href="javascript:void(0)" class="read-more"
+                                    onclick="toggleReadMore('@post.CommunityPostId')">Read More</a>
+                            }
+                            else
+                            {
+                                @post.Content
+                            }
+                        </div>
+                        <div class="post-icons">
+                            <div class="reaction-icons">
+                                <span class="vote-buttons">
+                                    @{
+                                        var userId = User.Identity.IsAuthenticated ?
+                                        int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) : 0;
+                                        var userVote = post.Votes.FirstOrDefault(v => v.UserId == userId)?.IsUpvote;
+                                    }
+                                    <button type="button" class="btn-vote upvote-btn @(userVote == true ? "active" : "")"
+                                        data-post-id="@post.CommunityPostId" data-is-upvote="true">
+                                        <i class="fas fa-arrow-up"></i> <span class="upvote-count">@post.Votes.Count(v =>
+                                                                                v.IsUpvote == true)</span>
+                            </button>
+                            <span class="net-votes" data-post-id="@post.CommunityPostId">@(post.Votes.Count(v =>
+                                                                v.IsUpvote == true) - post.Votes.Count(v => v.IsUpvote == false))</span>
+                            <button type="button" class="btn-vote downvote-btn @(userVote == false ? "active" : "")"
+                                data-post-id="@post.CommunityPostId" data-is-upvote="false">
+                                <i class="fas fa-arrow-down"></i> <span class="downvote-count">@post.Votes.Count(v =>
+                                                                        v.IsUpvote == false)</span>
+                            </button>
+                        </span>
                     </div>
-                    
-                    @* <!-- Comment form (only show if user is authenticated) --> *@
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <form method="post" asp-page-handler="AddComment" class="mt-2">
-                            <input type="hidden" name="postId" value="@post.CommunityPostId" />
-                            <div class="input-group">
-                                <textarea name="commentContent" class="form-control" placeholder="Add a comment..." required></textarea>
-                                <button type="submit" class="btn btn-primary">Post</button>
-                            </div>
-                        </form>
-                    }
-                    
-                    @* <!-- Toggle comments button --> *@
-                    <button class="btn btn-sm btn-link mt-1" type="button" data-bs-toggle="collapse" 
-                            data-bs-target="#comments-@post.CommunityPostId" aria-expanded="false" 
-                            aria-controls="comments-@post.CommunityPostId">
-                        Show comments
-                    </button>
+                    <div class="post-meta">
+                        <span class="badge badge-primary">@(post.Comments?.Count ?? 0) comments</span>
+                        <span class="badge badge-secondary">@post.CreatedAt.ToString("g")</span>
+                    </div>
                 </div>
-            </div>
-        }
-    }
-    else
-    {
-        <p>No posts yet. Be the first to post!</p>
-    }
 
-    <a href="#" class="see-more">See More</a>
-    
+                        @* <!-- Comments Section --> *@
+                        <div class="comments-section mt-3">
+                            <div class="comment-count mb-2">
+                                <span>💬 @(post.Comments?.Count ?? 0) comments</span>
+                            </div>
+
+                            @* <!-- Comments list (initially hidden) --> *@
+                            <div class="comments-list collapse" id="comments-@post.CommunityPostId">
+                        @foreach (var comment in post.Comments ?? new List<CommunityComment>())
+                                {
+                                    <div class="comment-card mb-2 p-2 border rounded">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-avatar" style="width: 30px; height: 30px;">
+                                                    <img src="https://ui-avatars.com/api/?name=@(comment.User?.Username ?? "User")&background=2c5887&color=fff"
+                                                        alt="User Avatar" width="30" height="30">
+                                                </div>
+                                                <strong class="ms-2">@comment.User?.Username</strong>
+                                            </div>
+                                            <small class="text-muted">@comment.CreatedAt.ToString("g")</small>
+                                        </div>
+                                        <p class="mb-0 mt-2">@comment.Content</p>
+                                        @if (User.Identity.IsAuthenticated && comment.UserId ==
+                                                                    int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+                                        {
+                                            <div class="comment-actions">
+                                                <button class="btn btn-sm btn-outline-primary edit-comment-btn"
+                                                    data-comment-id="@comment.CommunityCommentId"
+                                                    data-original-content="@comment.Content">
+                                                    Edit
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger delete-comment-btn"
+                                                    data-comment-id="@comment.CommunityCommentId">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+
+                            @* <!-- Comment form (only show if user is authenticated) --> *@
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form method="post" asp-page-handler="AddComment" class="mt-2">
+                                    <input type="hidden" name="postId" value="@post.CommunityPostId" />
+                                    <div class="input-group"
+                                        style="border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                        <textarea name="commentContent" class="form-control" placeholder="Add a comment..." required
+                                            style="padding: 8px 12px; resize: none; height: 20px; border: 1px solid #ced4da; border-right: none;"></textarea>
+                                        <button type="submit" class="btn btn-primary"
+                                            style="border-radius: 0 4px 4px 0;">Post</button>
+                                    </div>
+                                </form>
+                            }
+
+                            @* <!-- Toggle comments button --> *@
+                            <button class="btn btn-sm btn-link mt-1" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#comments-@post.CommunityPostId" aria-expanded="false"
+                                aria-controls="comments-@post.CommunityPostId">
+                                Show comments
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="post-card text-center py-4">
+                    <p>No posts yet. Be the first to post!</p>
+                </div>
+            }
+
+            <a href="#" class="see-more">See More</a>
+        </div>
+    </div>
+
+    @* <!-- Contacts Sidebar --> *@
+    <div class="community-sidebar">
+        <div class="contacts-card">
+            <div class="contacts-header">
+                <div class="contacts-title">Contacts</div>
+                <div><i class="fas fa-ellipsis-h"></i></div>
+            </div>
+
+            <div class="contacts-search">
+                <input type="text" placeholder="Search contacts...">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="contacts-category">Online</div>
+
+            <div class="contact-item">
+                <div class="contact-avatar">
+                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2c5887&color=fff" alt="User Avatar"
+                        width="40" height="40">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">John Doe</div>
+                    <div class="contact-role">Property Manager</div>
+                </div>
+                <div class="contact-status"></div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=2c5887&color=fff" alt="User Avatar"
+                        width="40" height="40">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Jane Smith</div>
+                    <div class="contact-role">Maintenance</div>
+                </div>
+                <div class="contact-status"></div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Mike+Johnson&background=2c5887&color=fff"
+                        alt="User Avatar" width="40" height="40">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Mike Johnson</div>
+                    <div class="contact-role">Resident</div>
+                </div>
+                <div class="contact-status away"></div>
+            </div>
+
+            <div class="contacts-category">Offline</div>
+
+            <div class="contact-item">
+                <div class="contact-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Sarah+Williams&background=2c5887&color=fff"
+                        alt="User Avatar" width="40" height="40">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Sarah Williams</div>
+                    <div class="contact-role">Resident</div>
+                </div>
+                <div class="contact-status offline"></div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Robert+Brown&background=2c5887&color=fff"
+                        alt="User Avatar" width="40" height="40">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Robert Brown</div>
+                    <div class="contact-role">Security</div>
+                </div>
+                <div class="contact-status offline"></div>
+            </div>
+        </div>
+
+        @* <!-- Additional sidebar content can go here --> *@
+        <div class="contacts-card">
+            <div class="contacts-header">
+                <div class="contacts-title">Quick Links</div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-file-alt me-2"></i> Community Guidelines
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone-alt me-2"></i> Emergency Contacts
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-calendar-alt me-2"></i> Events Calendar
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Add edit modal at the bottom of the page -->
+<!-- Add edit modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -408,17 +859,17 @@
                 <div class="modal-body">
                     <input type="hidden" id="editId" name="id" />
                     <input type="hidden" id="editType" name="type" value="post" />
-                    
+
                     <div class="form-group post-edit-fields">
                         <label>Title</label>
                         <input type="text" class="form-control" name="title" id="editTitle">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Content</label>
                         <textarea class="form-control" name="content" id="editContent" rows="5"></textarea>
                     </div>
-                    
+
                     <div class="form-group post-edit-fields">
                         <label>Type</label>
                         <select class="form-control" name="postType" id="editPostType" disabled>
@@ -438,7 +889,7 @@
     </div>
 </div>
 
-<!-- Add confirmation modal at the bottom of the page -->
+<!-- Add confirmation modal -->
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -457,55 +908,68 @@
     </div>
 </div>
 
-<!-- Add JavaScript to handle editing -->
 @section Scripts {
+    @* <!-- Make sure Font Awesome is included in your layout --> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            @* // Toggle new thread form *@
+                $("#new-thread-button").click(function () {
+                    $("#new-thread-form").addClass("thread-form-active");
+                    $(this).hide();
+                });
+
+            $("#cancel-thread").click(function () {
+                $("#new-thread-form").removeClass("thread-form-active");
+                $("#new-thread-button").show();
+            });
+
             // Handle post editing
-            $('.edit-post-btn').click(function() {
+            $('.edit-post-btn').click(function () {
                 const postId = $(this).data('post-id');
                 const title = $(this).data('original-title');
                 const content = $(this).data('original-content');
                 const type = $(this).data('original-type');
-                
+
                 $('#editId').val(postId);
                 $('#editType').val('post');
                 $('#editTitle').val(title);
                 $('#editContent').val(content);
                 $('#editPostType').val(type);
                 $('.post-edit-fields').show();
-                
+
                 $('#editModal').modal('show');
             });
-            
+
             // Handle comment editing
-            $('.edit-comment-btn').click(function() {
+            $('.edit-comment-btn').click(function () {
                 const commentId = $(this).data('comment-id');
                 const content = $(this).data('original-content');
-                
+
                 $('#editId').val(commentId);
                 $('#editType').val('comment');
                 $('#editContent').val(content);
                 $('.post-edit-fields').hide();
-                
+
                 $('#editModal').modal('show');
             });
-            
+
             // Form submission
-            $('#editForm').submit(function(e) {
+            $('#editForm').submit(function (e) {
                 e.preventDefault();
-                
+
                 const formData = {
                     id: $('#editId').val(),
                     type: $('#editType').val(),
                     content: $('#editContent').val()
                 };
-                
+
                 if (formData.type === 'post') {
                     formData.title = $('#editTitle').val();
                     formData.postType = $('#editPostType').val();
                 }
-                
+
                 $.ajax({
                     url: window.location.pathname + '?handler=Edit',
                     type: 'POST',
@@ -513,10 +977,10 @@
                     headers: {
                         "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
                     },
-                    success: function() {
+                    success: function () {
                         location.reload();
                     },
-                    error: function() {
+                    error: function () {
                         alert('Error updating content');
                     }
                 });
@@ -528,46 +992,46 @@
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
 
             // Handle post deletion
-            $('.delete-post-btn').click(function() {
+            $('.delete-post-btn').click(function () {
                 itemToDelete = $(this).data('post-id');
                 deleteType = 'post';
                 deleteModal.show();
             });
 
             // Handle comment deletion
-            $('.delete-comment-btn').click(function() {
+            $('.delete-comment-btn').click(function () {
                 itemToDelete = $(this).data('comment-id');
                 deleteType = 'comment';
                 deleteModal.show();
             });
 
             // Confirm deletion
-            $('#confirmDeleteBtn').click(function() {
+            $('#confirmDeleteBtn').click(function () {
                 $.ajax({
                     url: window.location.pathname + '?handler=Delete',
                     type: 'POST',
-                    data: { 
+                    data: {
                         id: itemToDelete,
                         type: deleteType,
                         __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                     },
-                    success: function() {
+                    success: function () {
                         deleteModal.hide();
                         location.reload();
                     },
-                    error: function() {
+                    error: function () {
                         alert('Error deleting item');
                     }
                 });
             });
 
             // Voting functionality
-            $(document).on('click', '.btn-vote', function() {
+            $(document).on('click', '.btn-vote', function () {
                 const postId = $(this).data('post-id');
                 const isUpvote = $(this).data('is-upvote');
                 const $button = $(this);
-                const $oppositeButton = isUpvote ? 
-                    $(`.downvote-btn[data-post-id="${postId}"]`) : 
+                const $oppositeButton = isUpvote ?
+                    $(`.downvote-btn[data-post-id="${postId}"]`) :
                     $(`.upvote-btn[data-post-id="${postId}"]`);
 
                 // If already active, this is an unvote
@@ -577,25 +1041,67 @@
                 $.ajax({
                     url: window.location.pathname + '?handler=Vote',
                     type: 'POST',
-                    data: { 
+                    data: {
                         postId: postId,
                         isUpvote: voteValue,
                         __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                     },
-                    success: function(response) {
+                    success: function (response) {
                         // Update counts
                         $(`.upvote-btn[data-post-id="${postId}"] .upvote-count`).text(response.upvotes);
                         $(`.downvote-btn[data-post-id="${postId}"] .downvote-count`).text(response.downvotes);
-                        
+
                         // Update net votes - add this line
                         $(`.net-votes[data-post-id="${postId}"]`).text(response.upvotes - response.downvotes);
-                        
+
                         // Update active states
                         $button.toggleClass('active', response.userVote === isUpvote);
                         $oppositeButton.removeClass('active');
                     },
-                    error: function() {
+                    error: function () {
                         alert('Error processing your vote');
+                    }
+                });
+            });
+        });
+
+        // Read more functionality
+        function toggleReadMore(postId) {
+            const dotsElement = document.getElementById(`dots-${postId}`);
+            const moreTextElement = document.getElementById(`more-${postId}`);
+            const linkElement = document.querySelector(`a[onclick="toggleReadMore('${postId}')"]`);
+
+            if (dotsElement.style.display === "none") {
+                dotsElement.style.display = "inline";
+                linkElement.innerHTML = "Read More";
+                moreTextElement.style.display = "none";
+            } else {
+                dotsElement.style.display = "none";
+                linkElement.innerHTML = "Read Less";
+                moreTextElement.style.display = "inline";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all vote buttons
+            const voteButtons = document.querySelectorAll('.vote-btn');
+
+            // Add click event listeners to each button
+            voteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // If the same button is clicked again, toggle its active state
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                    } else {
+                        // If it's an upvote, remove active from downvote and vice versa
+                        if (this.classList.contains('upvote')) {
+                            document.querySelector('.downvote').classList.remove('active');
+                        } else {
+                            document.querySelector('.upvote').classList.remove('active');
+                        }
+
+                        // Add active class to the clicked button
+                        this.classList.add('active');
                     }
                 });
             });

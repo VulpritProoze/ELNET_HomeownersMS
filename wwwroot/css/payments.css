@@ -1,0 +1,316 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.billing-container {
+    width: 65%;
+    float: left;
+    padding: 20px;
+}
+
+.payment-panel {
+    width: 35%;
+    float: right;
+    padding: 10px;
+}
+
+/* Section styling */
+.section-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Search bar */
+.search-container {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.search-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+/* Table styling */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    background-color: #3a6fa0;
+    color: white;
+    text-align: left;
+    padding: 12px;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.data-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-badge.pending {
+    background-color: #ffeeba;
+    color: #856404;
+}
+
+.status-badge.unpaid {
+    background-color: #d6d8db;
+    color: #4a4a4a;
+}
+
+.status-badge.overdue {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.page-num {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.page-num.active {
+    background-color: #3a6fa0;
+    color: white;
+    border-color: #3a6fa0;
+}
+
+.page-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #3a6fa0;
+}
+
+/* Download link */
+.download-link {
+    color: #3a6fa0;
+}
+
+/* Payment panel styling */
+.current-balance {
+    background-color: #3a6fa0;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.current-balance h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.current-balance h2 {
+    margin: 10px 0 15px;
+    font-size: 28px;
+}
+
+.pay-all-btn {
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 4px;
+    color: white;
+    padding: 6px 16px;
+    cursor: pointer;
+    float: right;
+}
+
+.selected-fees {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.selected-fees h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+}
+
+.fee-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.fee-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+}
+
+/* Payment methods */
+.method-header {
+    background-color: #9cc3e6;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 1px;
+    border-radius: 4px;
+}
+
+.method-content {
+    background-color: #e6f2ff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 0 0 4px 4px;
+}
+
+.cash-option {
+    margin-bottom: 15px;
+}
+
+.cash-note {
+    font-size: 12px;
+    color: #666;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+.visit-details {
+    margin-bottom: 15px;
+}
+
+.visit-details h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+.address, .hours {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.instructions {
+    font-size: 13px;
+}
+
+.instruction-item {
+    margin-bottom: 5px;
+}
+
+.confirm-payment-btn {
+    display: block;
+    width: 100%;
+    background-color: #3a6fa0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.confirm-payment-btn:hover {
+    background-color: #315d87;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .billing-container, .payment-panel {
+        width: 100%;
+        float: none;
+    }
+}
+
+/* Additional utility classes */
+.mt-4 {
+    margin-top: 1.5rem;
+}

@@ -20,7 +20,9 @@
         <button class="sideNav_toggleBtn" id="sideNav_toggleBtn">
             <i class="bi bi-list fs-4 p-2"></i>
         </button>
-        <h3 class="m-0">@ViewData["HeaderTitle"]</h3>
+        <h3 class="m-0">
+            <a class="ghost-link" asp-page="/Dashboard/Index">@ViewData["HeaderTitle"]</a>
+        </h3>
         <i class="bi bi-bell fs-4 p-2"></i>
     </div>
 
@@ -48,6 +50,10 @@
             <a asp-page="/Admin/Facilities/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Facilities/Index" ? "active" : "")">
                 <i class="bi bi-calendar-fill"></i>
                 <span>Facilities Management</span>
+            </a>
+            <a asp-page="/Admin/Reservations/ManageReservations" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Reservations/ManageReservations" ? "active" : "")">
+                <i class="bi bi-calendar-check-fill"></i>
+                <span>Reservations</span>
             </a>
             <a asp-page="/Admin/Announcements/Index" class="navItem @(ViewData["CurrentPage"]?.ToString() == "/Admin/Announcements/Index" ? "active" : "")">
                 <i class="bi bi-megaphone-fill"></i>

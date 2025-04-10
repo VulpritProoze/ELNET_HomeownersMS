@@ -1,0 +1,252 @@
+@page
+@using HomeownersMS.Models
+@model HomeownersMS.Pages.Reservation.FacilityModel
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
+
+@{
+    Layout = "_ResidentLayout"; 
+    ViewData["HeaderTitle"] = "Facilities";
+    ViewData["Title"] = @Model.Facility?.Name ?? "Facilities";
+    var username = HttpContext?.User?.Identity?.Name ?? "Guest";
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "", name);
+            }
+        }
+        return ("", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
+    ViewData["Username"] = username;
+    ViewData["CurrentPage"] = currentPage;
+}
+
+<style>
+    .facility-hero {
+        position: relative;
+        height: 70vh;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .facility-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .facility-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 2rem;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        font-size: 1.5rem;
+    }
+    
+    .rating-stars .empty {
+        color: #e4e5e9;
+    }
+
+    .rating-stars i {
+        cursor: pointer; /* Show pointer cursor for clickable stars */
+    }
+    
+    .review-card {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+    }
+    
+    .review-actions {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    
+    .review-card:hover .review-actions {
+        opacity: 1;
+    }
+</style>
+
+<div class="container-fluid px-0">
+    @if (Model.Facility != null)
+    {
+        @* <!-- Facility Hero Section --> *@
+        <div class="facility-hero">
+            <img src="@Url.Content($"~/{Model.Facility.FacilityImage}")" alt="@Model.Facility.Name" />
+            <div class="facility-overlay">
+                <h1 class="display-4">@Model.Facility.Name</h1>
+                <p class="lead">
+                    <i class="fas fa-map-marker-alt"></i> @Model.Facility.Address
+                </p>
+                <h4>₱@(Convert.ToDecimal(Model.Facility.PricePerHour).ToString("N0")) / hour</h4>
+                <a asp-page="/Reservation/Reserve" asp-route-facilityId="@Model.Facility.FacilityId" class="btn btn-primary btn-lg mt-3">
+                    Reserve Now
+                </a>
+            </div>
+        </div>
+
+        <div class="container">
+            @* <!-- Reviews Section --> *@
+            <div class="row">
+                <div class="col-md-8">
+                    <h2 class="mb-4">Reviews</h2>
+                    
+                    @if (Model.CanReview)
+                    {
+                        if (Model.HasReviewed)
+                        {
+                            @* <!-- User's Review --> *@
+                            <div class="card review-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        @{
+                                            var profileImageUrl2 = !string.IsNullOrEmpty(Model.UserReview?.Resident?.ProfileImage) 
+                                                ? Url.Content($"~/{Model.UserReview?.Resident?.ProfileImage}")
+                                                : Url.Content("~/images/default-profile.jpg");
+                                        }
+                                        <img class="profile-avatar-alt" src="@profileImageUrl2" />
+                                        <h5 class="card-title mb-0">Your Review</h5>
+                                        <div class="review-actions">
+                                            <form method="post" asp-page-handler="DeleteReview" 
+                                                  asp-route-reviewId="@Model.UserReview?.ReviewId"
+                                                  asp-route-facilityId="@Model.Facility.FacilityId">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="rating-stars mb-2">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="bi @(i <= Model.UserReview?.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                        }
+                                    </div>
+                                    <p class="card-text">@Model.UserReview?.Content</p>
+                                    <small class="text-muted">
+                                        Reviewed on @Model.UserReview?.ReviewDate.ToString("MMMM dd, yyyy")
+                                    </small>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @* <!-- Add Review Form --> *@
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Add Your Review</h5>
+                                    <form method="post" asp-page-handler="AddReview">
+                                        <input type="hidden" name="facilityId" value="@Model.Facility.FacilityId" />
+                                        <input type="hidden" asp-for="NewReview.FacilityId" value="@Model.Facility.FacilityId" />
+                                        <div class="mb-3">
+                                            <label class="form-label">Rating</label>
+                                            <div class="rating-stars mb-2" id="ratingStars">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="bi bi-star empty" data-rating="@i"></i>
+                                                }
+                                            </div>
+                                            <input type="hidden" asp-for="NewReview.Rating" id="selectedRating" />
+                                            <span asp-validation-for="NewReview.Rating" class="text-danger"></span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label asp-for="NewReview.Content" class="form-label">Review</label>
+                                            <textarea asp-for="NewReview.Content" class="form-control" rows="3"></textarea>
+                                            <span asp-validation-for="NewReview.Content" class="text-danger"></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @* <!-- Other Reviews --> *@
+                    @if (Model.FacilityReviews.Any())
+                    {
+                        foreach (var review in Model.FacilityReviews.Where(r => r.ResidentId.ToString() != HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)))
+                        {
+                            <div class="card review-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        @{
+                                            var profileImageUrl = !string.IsNullOrEmpty(review.Resident?.ProfileImage) 
+                                                ? Url.Content($"~/{review.Resident.ProfileImage}")
+                                                : Url.Content("~/images/default-profile.jpg");
+                                        }
+                                        <img  class="profile-avatar-alt" src="@profileImageUrl" />
+                                        <h5 class="card-title mb-0">@review.Resident?.FName @review.Resident?.LName</h5>
+                                        <div class="rating-stars">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="bi bi-star @(i <= review.Rating ? "" : "empty")"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <p class="card-text">@review.Content</p>
+                                    <small class="text-muted">
+                                        Reviewed on @review.ReviewDate.ToString("MMMM dd, yyyy")
+                                    </small>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            No reviews yet for this facility.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            Facility not found.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Rating stars interaction
+        document.querySelectorAll('#ratingStars .bi').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.dataset.rating);
+                document.getElementById('selectedRating').value = rating;
+                
+                // Update star display
+                document.querySelectorAll('#ratingStars .bi').forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('bi-star', 'empty');
+                        s.classList.add('bi-star-fill');
+                    } else {
+                        s.classList.remove('bi-star-fill');
+                        s.classList.add('bi-star', 'empty');
+                    }
+                });
+            });
+        });
+    </script>
+}

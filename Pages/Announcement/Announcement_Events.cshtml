@@ -1,14 +1,37 @@
 @page
 @model HomeownersMS.Pages.Announcement_Events.Announcement_EventsModel
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
+@using HomeownersMS.Models
 @{
     Layout = "_ResidentLayout"; // Use the Admin layout
     ViewData["HeaderTitle"] = "Announcement & Events";
     ViewData["Title"] = "Announcement & Events";
     var username = HttpContext?.User?.Identity?.Name ?? "Guest";
     var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "", name);
+            }
+        }
+        return ("", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
     ViewData["Username"] = username;
     ViewData["CurrentPage"] = currentPage;
 }
+
 <style>
     .ann-Card {
         border: 1px solid #ddd;

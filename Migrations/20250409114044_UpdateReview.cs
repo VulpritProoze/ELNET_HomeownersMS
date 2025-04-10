@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HomeownersMS.Migrations
 {
     /// <inheritdoc />
-    public partial class Create : Migration
+    public partial class UpdateReview : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,28 +41,6 @@ namespace HomeownersMS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FacilityReviews",
-                columns: table => new
-                {
-                    ReviewId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FacilityId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Content = table.Column<string>(type: "TEXT", nullable: true),
-                    ReviewDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Rating = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FacilityReviews", x => x.ReviewId);
-                    table.ForeignKey(
-                        name: "FK_FacilityReviews_Facility_FacilityId",
-                        column: x => x.FacilityId,
-                        principalTable: "Facility",
-                        principalColumn: "FacilityId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -241,17 +219,44 @@ namespace HomeownersMS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CommunityVote",
+                columns: table => new
+                {
+                    CommunityVoteId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CommunityPostId = table.Column<int>(type: "INTEGER", nullable: true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
+                    IsUpvote = table.Column<bool>(type: "INTEGER", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommunityVote", x => x.CommunityVoteId);
+                    table.ForeignKey(
+                        name: "FK_CommunityVote_CommunityPost_CommunityPostId",
+                        column: x => x.CommunityPostId,
+                        principalTable: "CommunityPost",
+                        principalColumn: "CommunityPostId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CommunityVote_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FacilityRequest",
                 columns: table => new
                 {
                     FacilityRequestId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ReservationDate = table.Column<DateOnly>(type: "TEXT", nullable: true),
-                    ReservationTime = table.Column<TimeOnly>(type: "TEXT", nullable: true),
-                    RequestCompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Status = table.Column<int>(type: "INTEGER", nullable: true),
-                    ResidentId = table.Column<int>(type: "INTEGER", nullable: true),
-                    FacilityId = table.Column<int>(type: "INTEGER", nullable: true),
+                    RequestDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ApprovalDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    ResidentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FacilityId = table.Column<int>(type: "INTEGER", nullable: false),
                     FullName = table.Column<string>(type: "TEXT", nullable: true),
                     EmailAddress = table.Column<string>(type: "TEXT", nullable: true),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: true)
@@ -274,6 +279,41 @@ namespace HomeownersMS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FacilityReview",
+                columns: table => new
+                {
+                    ReviewId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FacilityId = table.Column<int>(type: "INTEGER", nullable: true),
+                    ResidentId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Content = table.Column<string>(type: "TEXT", nullable: true),
+                    ReviewDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Rating = table.Column<int>(type: "INTEGER", nullable: false),
+                    ResidentUserId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FacilityReview", x => x.ReviewId);
+                    table.ForeignKey(
+                        name: "FK_FacilityReview_Facility_FacilityId",
+                        column: x => x.FacilityId,
+                        principalTable: "Facility",
+                        principalColumn: "FacilityId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FacilityReview_Resident_ResidentId",
+                        column: x => x.ResidentId,
+                        principalTable: "Resident",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FacilityReview_Resident_ResidentUserId",
+                        column: x => x.ResidentUserId,
+                        principalTable: "Resident",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Service",
                 columns: table => new
                 {
@@ -292,6 +332,43 @@ namespace HomeownersMS.Migrations
                         principalTable: "Staff",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Event",
+                columns: table => new
+                {
+                    EventId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    EventType = table.Column<int>(type: "INTEGER", nullable: false),
+                    EventDate = table.Column<DateOnly>(type: "TEXT", nullable: true),
+                    EventTimeStart = table.Column<TimeOnly>(type: "TEXT", nullable: true),
+                    EventTimeEnd = table.Column<TimeOnly>(type: "TEXT", nullable: true),
+                    GuestCapacity = table.Column<int>(type: "INTEGER", nullable: true),
+                    ContactNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    ContactEmail = table.Column<string>(type: "TEXT", nullable: true),
+                    ContactName = table.Column<string>(type: "TEXT", nullable: true),
+                    AdditionalServices = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<int>(type: "INTEGER", nullable: true),
+                    FacilityRequestId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Event", x => x.EventId);
+                    table.ForeignKey(
+                        name: "FK_Event_FacilityRequest_FacilityRequestId",
+                        column: x => x.FacilityRequestId,
+                        principalTable: "FacilityRequest",
+                        principalColumn: "FacilityRequestId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Event_User_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -345,6 +422,27 @@ namespace HomeownersMS.Migrations
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommunityVote_CommunityPostId_UserId",
+                table: "CommunityVote",
+                columns: new[] { "CommunityPostId", "UserId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommunityVote_UserId",
+                table: "CommunityVote",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Event_CreatedBy",
+                table: "Event",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Event_FacilityRequestId",
+                table: "Event",
+                column: "FacilityRequestId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FacilityRequest_FacilityId",
                 table: "FacilityRequest",
                 column: "FacilityId");
@@ -355,9 +453,20 @@ namespace HomeownersMS.Migrations
                 column: "ResidentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FacilityReviews_FacilityId",
-                table: "FacilityReviews",
+                name: "IX_FacilityReview_FacilityId",
+                table: "FacilityReview",
                 column: "FacilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FacilityReview_ResidentId",
+                table: "FacilityReview",
+                column: "ResidentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FacilityReview_ResidentUserId",
+                table: "FacilityReview",
+                column: "ResidentUserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resource_CreatedBy",
@@ -390,10 +499,13 @@ namespace HomeownersMS.Migrations
                 name: "CommunityComment");
 
             migrationBuilder.DropTable(
-                name: "FacilityRequest");
+                name: "CommunityVote");
 
             migrationBuilder.DropTable(
-                name: "FacilityReviews");
+                name: "Event");
+
+            migrationBuilder.DropTable(
+                name: "FacilityReview");
 
             migrationBuilder.DropTable(
                 name: "Resource");
@@ -405,16 +517,19 @@ namespace HomeownersMS.Migrations
                 name: "CommunityPost");
 
             migrationBuilder.DropTable(
-                name: "Facility");
+                name: "FacilityRequest");
 
             migrationBuilder.DropTable(
                 name: "Admin");
 
             migrationBuilder.DropTable(
-                name: "Resident");
+                name: "Service");
 
             migrationBuilder.DropTable(
-                name: "Service");
+                name: "Facility");
+
+            migrationBuilder.DropTable(
+                name: "Resident");
 
             migrationBuilder.DropTable(
                 name: "Staff");

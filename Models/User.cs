@@ -26,6 +26,8 @@ namespace HomeownersMS.Models
 
         public virtual ICollection<CommunityVote> CommunityVotes { get; set; } = new List<CommunityVote>();
 
+        public virtual ICollection<Event> Events { get; set; } = new List<Event>();
+
 
         public void SetPassword(string password)
         {

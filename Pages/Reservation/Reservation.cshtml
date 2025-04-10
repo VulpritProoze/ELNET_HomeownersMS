@@ -1,116 +1,291 @@
 @page
-@using System.Security.Claims
 @model HomeownersMS.Pages.Reservation.ReservationModel
+@using HomeownersMS.Models
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using HomeownersMS.Data
+@inject HomeownersContext context
 @{
-    Layout = "_ResidentLayout"; // Use the Admin layout
+    ViewData["CurrentPage"] = "/Reservation/Reservation";  // <-- ADD THIS LINE
+    Layout = "_ResidentLayout"; 
     ViewData["HeaderTitle"] = "Reservation";
     ViewData["Title"] = "Reservation";
     var username = HttpContext?.User?.Identity?.Name ?? "Guest";
     var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    // Get the resident's profile image and name directly from the database
+    var (profileImagePath, residentName) = await Task.Run(async () => {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null && int.TryParse(userId, out int residentId))
+        {
+            var resident = await context.Residents.FirstOrDefaultAsync(r => r.UserId == residentId);
+            if (resident != null)
+            {
+                var name = $"{resident.FName} {resident.LName}".Trim();
+                return (resident.ProfileImage ?? "/images/default-profile.jpg", name);
+            }
+        }
+        return ("/images/default-profile.jpg", "Guest");
+    });
+    
+    ViewData["ProfileImage"] = profileImagePath;
+    ViewData["ResidentName"] = residentName;
     ViewData["Username"] = username;
     ViewData["CurrentPage"] = currentPage;
 }
 
-    <div class="row">
-        <!-- Reservation Content -->
-        <div class="col-12">
-            <div class="facilities">
-                <h2>Facilities</h2>
-                @* Facilities container *@
-                <div class="container">
-                    <div class="row g-3"> <!-- Row with spacing -->
-                        <div class="col-lg-12"> <!-- 1 column on large screens, 2 columns on medium/small screens -->
-                            <a asp-page="/Reservation/FunctionalHall" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up @(currentPage == "/Reservation/FunctionalHall" ? "active" : "")">
-                                <img src="/images/FunctionHall.png" class="img-fluid facility-img me-3" alt="Function Hall">
-                                <div>
-                                    <strong>Function Hall</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
-                                </div>
-                            </a>
-                        </div>
+<div class="row">
+    @* Breadcrumb navigatin *@
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Reservation</li>
+        </ol>
+    </nav>
 
-                        <div class="col-lg-12">
-                            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up">
-                                <img src="/images/SwimmingPool.png" class="img-fluid facility-img me-3" alt="Swimming Pool">
-                                <div>
-                                    <strong>Swimming Pool</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
-                                </div>
-                            </a>
+    @* <!-- Left Side: Facilities --> *@
+    <div class="col-md-4">
+        <div class="facilities mb-4">
+            <h4 class="fw-bold">Facilities</h4>
+            <div class="container-fluid p-0">
+                <div class="row g-3">
+                    @if (Model.Facilities.Any())
+                    {
+                        @foreach (var facility in Model.Facilities)
+                        {
+                            @* <!-- Facility --> *@
+                            <div class="col-12">
+                                <a asp-page="/Reservation/Facility" asp-route-facilityId="@facility.FacilityId" class="ghost-link">
+                                    <div class="card facility-card">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img src="@Url.Content($"~/{@facility.FacilityImage}")" 
+                                                        class="img-fluid facility-img rounded-start"
+                                                        alt="@facility.Name">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h5 class="card-title mb-1">₱ @string.Format("{0:N0}", facility.PricePerHour)/hr</h5>
+                                                    <h6 class="card-subtitle mb-1">@facility.Name</h6>
+                                                    <p class="card-text"><small class="text-muted">@facility.Address</small></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-12">
+                            <p class="text-center card-subtitle">No facilities available.</p>
                         </div>
+                    }
 
-                        <div class="col-lg-12">
-                            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up">
-                                <img src="/images/BasketballCourt.png" class="img-fluid facility-img me-3" alt="Basketball Court">
-                                <div>
-                                    <strong>Basketball Court</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-lg-12">
-                            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center ann-Card clean-up">
-                                <img src="/images/Chapel.png" class="img-fluid facility-img me-3" alt="Chapel">
-                                <div>
-                                    <strong>Chapel</strong> <br> 1,500/hr - Lat 7: Rosewood Lane
-                                </div>
-                            </a>
-                        </div>
-                    </div>
                 </div>
-            </div>
-
-            <div class="reservation-history mt-5">
-                <h2>Reservation History</h2>
-                <div class="table-responsive"> <!-- Makes table scrollable on small screens -->
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Facility</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Function Hall
-                                    <br>
-                                    <small class="text-muted">ID/34251</small>
-                                </td>
-                                <td>Feb. 15, 2025</td>
-                                <td>10:30 AM - 7:30 PM</td>
-                                <td><span class="badge bg-success">Approved</span></td>
-                            </tr>
-                            <tr>
-                                <td>Party Room
-                                    <br>
-                                    <small class="text-muted">ID/34251</small>
-                                </td>
-                                <td>Feb. 13, 2025</td>
-                                <td>10:30 AM - 7:30 PM</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td>Function Hall
-                                    <br>
-                                    <small class="text-muted">ID/34251</small>
-                                </td>
-                                <td>Feb. 3, 2025</td>
-                                <td>10:30 AM - 7:30 PM</td>
-                                <td><span class="badge bg-success">Approved</span></td>
-                            </tr>
-                            <tr>
-                                <td>Function Hall
-                                    <br>
-                                    <small class="text-muted">ID/34251</small>
-                                </td>
-                                <td>Jan. 15, 2025</td>
-                                <td>10:30 AM - 7:30 PM</td>
-                                <td><span class="badge bg-danger">Canceled</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <a href="#" class="btn btn-primary">View All</a>
             </div>
         </div>
     </div>
+
+    @* <!-- Right Side: Reservation Log and History --> *@
+    <div class="col-md-8">
+        @* <!-- Reservation Log Section --> *@
+        <div class="reservation-log mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold">Reservation Log</h4>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary me-1"><i class="bi bi-filter"></i></button>
+                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-sort-down"></i></button>
+                </div>
+            </div>
+            
+            <div class="mb-3 d-flex gap-2">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+                </div>
+                <div class="input-group" style="max-width: 200px;">
+                    <input type="text" class="form-control" placeholder="Select Date" aria-label="Date">
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-calendar"></i></button>
+                </div>
+            </div>
+
+            @if (Model.PendingReservations.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr class="table-light">
+                                <th>Facility</th>
+                                <th>Date</th>
+                                <th>Guests</th>
+                                <th>Event</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var reservation in Model.PendingReservations)
+                            {
+                                <tr>
+                                    <td>
+                                        @(reservation.FacilityRequest?.Facility?.Name)
+                                        <br>
+                                        <small class="text-muted">ID/@reservation.FacilityRequest?.FacilityRequestId</small>
+                                    </td>
+                                    <td>
+                                        @(reservation.Event?.EventDate?.ToString("MMM. dd, yyyy") ?? "n.d")
+                                        <br>
+                                        <small class="text-muted">
+                                            @(reservation.Event?.EventTimeStart?.ToString("h:mm tt") ?? "--:--") - 
+                                            @(reservation.Event?.EventTimeEnd?.ToString("h:mm tt") ?? "--:--")
+                                        </small>
+                                    </td>
+                                    <td>@reservation.Event?.GuestCapacity Guests</td>
+                                    <td>@reservation.Event?.EventType</td>
+                                    <td><span class="badge bg-warning">@reservation.FacilityRequest?.Status</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link text-info"><i class="bi bi-info-circle"></i></button>
+                                        <button class="btn btn-sm btn-link text-danger"><i class="bi bi-x-lg"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="col-12">
+                    <p class="text-center card-subtitle">No pending reservations.</p>
+                </div>
+            }
+            <div class="text-center">
+                <button class="btn btn-outline-primary">Show More</button>
+            </div>
+        </div>
+
+        <!-- Reservation History Section -->
+        <div class="reservation-history mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold">Reservation History</h4>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary me-1"><i class="bi bi-filter"></i></button>
+                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-sort-down"></i></button>
+                </div>
+            </div>
+            
+            <div class="mb-3 d-flex gap-2">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+                </div>
+                <div class="input-group" style="max-width: 200px;">
+                    <input type="text" class="form-control" placeholder="Select Date" aria-label="Date">
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-calendar"></i></button>
+                </div>
+            </div>
+            @if (Model.HistoricalReservations.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr class="table-light">
+                                <th>Facility</th>
+                                <th>Date</th>
+                                <th>Guests</th>
+                                <th>Event</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var reservation in Model.HistoricalReservations)
+                            {
+                                <tr>
+                                    <td>
+                                        @(reservation.FacilityRequest?.Facility?.Name)
+                                        <br>
+                                        <small class="text-muted">ID/@reservation.FacilityRequest?.FacilityRequestId</small>
+                                    </td>
+                                    <td>
+                                        @(reservation.Event?.EventDate?.ToString("MMM. dd, yyyy") ?? "n.d")
+                                        <br>
+                                        <small class="text-muted">
+                                            @(reservation.Event?.EventTimeStart?.ToString("h:mm tt") ?? "--:--") - 
+                                            @(reservation.Event?.EventTimeEnd?.ToString("h:mm tt") ?? "--:--")
+                                        </small>
+                                    </td>
+                                    <td>@reservation.Event?.GuestCapacity Guests</td>
+                                    <td>@reservation.Event?.EventType</td>
+                                    <td>
+                                        <span class="badge 
+                                            @(reservation.FacilityRequest?.Status == RequestStatus.Approved ? "bg-success" :
+                                            reservation.FacilityRequest?.Status == RequestStatus.Declined ? "bg-danger" : 
+                                            reservation.FacilityRequest?.Status == RequestStatus.Cancelled ? "bg-danger" : "bg-warning")">
+                                            @reservation.FacilityRequest?.Status
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Feedback</button>
+                                    </td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="col-12">
+                    <p class="text-center card-subtitle">You currently have not made any reservations at all. Try scheduling a reservation now!</p>
+                </div>
+            }
+            <div class="text-center">
+                <button class="btn btn-outline-primary">Show More</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .facility-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+
+    .facility-img {
+        height: 100%;
+        object-fit: cover;
+        max-height: 150px;
+    }
+
+    .badge {
+        padding: 0.5em 0.8em;
+        border-radius: 4px;
+    }
+
+    .table th {
+        font-weight: 500;
+        color: #555;
+    }
+
+    .table td {
+        padding: 12px 8px;
+    }
+    .btn-primary {
+        background-color: #3a6ea5;
+        border-color: #3a6ea5;
+    }
+    .btn-outline-primary {
+        color: #3a6ea5;
+        border-color: #3a6ea5;
+    }
+    .btn-outline-primary:hover {
+        background-color: #3a6ea5;
+        border-color: #3a6ea5;
+    }
+</style>

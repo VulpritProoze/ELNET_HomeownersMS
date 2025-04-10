@@ -1,8 +1,11 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace HomeownersMS.Pages.Dashboard
 {
@@ -11,41 +14,70 @@ namespace HomeownersMS.Pages.Dashboard
     {
         private readonly HomeownersMS.Data.HomeownersContext _context;
 
-        // Ensure only one constructor is defined
         public IndexResidentModel(HomeownersMS.Data.HomeownersContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public List<Models.Announcement> LatestAnnouncements { get; private set; } = new();
-        public List<CalendarEvent> CalendarEvents { get; private set; } = new();
+        public List<Models.Event> AllEvents { get; private set; } = new();
+        public DateTime? SelectedDate { get; set; }
 
-        public void OnGet()
+        public void OnGet(DateTime? date = null)
         {
+            // Get current user ID from claims
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             // Fetch the 3 latest announcements ordered by CreatedAt (newest first)
-            LatestAnnouncements = _context.Announcements
+            LatestAnnouncements = _context
+                .Announcements
                 .OrderByDescending(a => a.CreatedAt)
                 .Take(3)
                 .ToList();
 
-            // Format announcements as calendar events
-            CalendarEvents = _context.Announcements
-                .Select(a => new CalendarEvent
-                {
-                    Title = a.Title,
-                    Start = $"{a.EventDate:yyyy-MM-dd}", // Use string interpolation to format DateOnly
-                    Description = a.Content,
-                    EventTime = $"{a.EventTime:hh\\:mm tt}" // Format TimeOnly as string
-                })
+            SelectedDate = date;
+
+            // Base query with required includes
+            var eventsQuery = _context.Events
+                .Include(e => e.FacilityRequest)
+                .ThenInclude(fr => fr.Facility)
+                .Where(e => e.FacilityRequest.Status == Models.RequestStatus.Approved) // Only approved events
+                .Where(e => e.CreatedBy == userId); // Only events created by current user
+
+            // Apply date filter if provided
+            if (date.HasValue)
+            {
+                eventsQuery = eventsQuery.Where(e => e.EventDate == DateOnly.FromDateTime(date.Value));
+            }
+
+            AllEvents = eventsQuery
+                .OrderBy(e => e.EventDate)
+                .ThenBy(e => e.EventTimeStart)
                 .ToList();
         }
 
-        public class CalendarEvent
+        public IActionResult OnGetFilterEvents(DateTime? date = null)
         {
-            public string? Title { get; set; }
-            public string? Start { get; set; } // Start is a string in "yyyy-MM-dd" format
-            public string? Description { get; set; }
-            public string? EventTime { get; set; } // EventTime is a string in "hh:mm tt" format
+            // Get current user ID from claims
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var eventsQuery = _context.Events
+                .Include(e => e.FacilityRequest)
+                .ThenInclude(fr => fr.Facility)
+                .Where(e => e.FacilityRequest.Status == Models.RequestStatus.Approved)
+                .Where(e => e.CreatedBy == userId);
+
+            if (date.HasValue)
+            {
+                eventsQuery = eventsQuery.Where(e => e.EventDate == DateOnly.FromDateTime(date.Value));
+            }
+
+            var events = eventsQuery
+                .OrderBy(e => e.EventDate)
+                .ThenBy(e => e.EventTimeStart)
+                .ToList();
+
+            return Partial("_EventsPartial", events);
         }
     }
 }

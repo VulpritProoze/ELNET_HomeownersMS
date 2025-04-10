@@ -1,5 +1,9 @@
 @import url("../node_modules/bootstrap-icons/font/bootstrap-icons.css");
 
+:root {
+    --primary: #3c6693;
+}
+
 /* Gi add ni Ram  */
 .validation-summary {
     color: #dc3545; /* Red color for errors */
@@ -317,4 +321,49 @@
     .facility-img {
         max-width: 150px; /* Even smaller for mobile devices */
     }
+}
+
+.ghost-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.ghost-link {
+    color: inherit;
+}
+
+/* profile image in navbar */
+/* Profile Avatar Styles */
+.profile-avatar {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Must match width for perfect circle */
+    border-radius: 50%; /* Makes it round */
+    border: 3px solid white; /* White border */
+    object-fit: cover; /* Ensures image fills the circle without distortion */
+    background-color: #f0f0f0; /* Fallback background if image fails to load */
+}
+
+.profile-avatar-alt {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Must match width for perfect circle */
+    border-radius: 50%; /* Makes it round */
+    border: 3px solid var(--primary); /* White border */
+    object-fit: cover; /* Ensures image fills the circle without distortion */
+    background-color: #000000; /* Fallback background if image fails to load */
+    margin-right: 10px;
+}
+
+/* If you want to make it slightly larger on hover */
+.profile-avatar:hover, .profile-avatar-alt:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+
+
+.profile-name {
+    font-size: 14px;
+    margin: 0;
+    color: #ffffff; /* or any color that matches your design */
+    opacity: 0.8; /* slightly transparent */
 }

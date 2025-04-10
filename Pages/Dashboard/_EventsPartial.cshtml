@@ -1,0 +1,27 @@
+@model List<HomeownersMS.Models.Event>
+
+@if (Model.Any())
+{
+    foreach (var evt in Model)
+    {
+        <div class="event-card" data-event-date="@evt.EventDate?.ToString("yyyy-MM-dd")">
+            <div class="event-date">
+                <strong>@evt.EventDate?.ToString("ddd, MMM dd yyyy")</strong>
+            </div>
+            <div class="event-time">
+                <strong>
+                    @(evt.EventTimeStart.HasValue ? evt.EventTimeStart.Value.ToString("h:mm tt") : "--:--")
+                    @(evt.EventTimeEnd.HasValue ? " - " + evt.EventTimeEnd.Value.ToString("h:mm tt") : "")
+                </strong>
+            </div>
+            <div class="event-location">
+                <i class="bi bi-geo-alt"></i> @evt.FacilityRequest?.Facility?.Name
+            </div>
+            <div class="event-title">@evt.Title</div>
+        </div>
+    }
+}
+else
+{
+    <p>No events for selected date</p>
+}

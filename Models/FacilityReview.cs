@@ -10,11 +10,16 @@ namespace HomeownersMS.Models
         public int ReviewId { get; set; }
 
         // Foreign key to Facility
+        [ForeignKey("Facility")]
         public int? FacilityId { get; set; }
 
         // Navigation property to Facility
-        [ForeignKey("FacilityId")]
         public virtual Facility? Facility { get; set; }
+
+        [ForeignKey("Resident")]
+        public int? ResidentId { get; set;}
+
+        public virtual Resident? Resident { get; set;}
 
         // Review content
         public string? Content { get; set; }
